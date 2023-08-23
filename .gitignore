@@ -50,3 +50,10 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Minishell
+LICENSE
+.vscode
+minishell
+get_token
+try_getenv

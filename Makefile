@@ -6,25 +6,28 @@
 #    By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/17 13:45:55 by sdeeyien          #+#    #+#              #
-#    Updated: 2023/08/17 13:58:38 by sdeeyien         ###   ########.fr        #
+#    Updated: 2023/08/22 16:24:26 by sdeeyien         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -g
+CFLAGS = -Wall -Werror -Wextra -g -fdiagnostics-color=always
+#CFLAGS =
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S), Linux)
-	READLINEFLAGS = -L /usr/include/readline -l readline
+	READLINEFLAGS = -L /usr/include/readline -l readline -l history
 else
 	READLINEFLAGS = -L /usr/opt/readline/lib -l readline
 endif
-LIBDIR = ./libft/
+LIBDIR = ./libft
 LIBOBJ = libft.a
 SRCDIR = ./src/
 OBJDIR =
 DEPS = minishell.h
 
-SRC = minishell.c read_line.c
+SRC = minishell.c get_token.c
+#SRC = get_token.c try_getpath.c
+#SRC = read_line_with_history.c
 BONUS =
 
 OBJ := $(patsubst %.c, $(OBJDIR)%.o, $(SRC))
