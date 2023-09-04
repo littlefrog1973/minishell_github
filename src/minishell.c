@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/08/23 06:22:45 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/08/23 11:33:25 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,23 @@ char	*get_readline(char *line)
 		return (NULL);
 }
 */
-int	main(void)
+
+
+void	void_arg(int *argc, char **argv)
+{
+	(void) argc;
+	(void) argv;
+}
+
+int	main(int argc, char *argv[], char *environ[])
 {
 	char		*read_line;
 	char		**argcc;
 	pid_t		pid;
-	extern char	**environ;
+//	extern char	**environ;
 	char		full_path[PATH_MAX];
 
+	void_arg(&argc, argv);
 	signal(SIGINT, return_promt);
 	signal(SIGQUIT, return_promt);
 	rl_catch_signals = 0;
@@ -87,7 +96,26 @@ int	main(void)
 			break;
 		}
 		argcc = ft_split(read_line, ' ');
-		if (get_fullpath(argcc[0], full_path))
+// start
+			pid = fork();
+			if (pid == 0)
+			{
+				if (get_fullpath(argcc[0], full_path))
+				{
+					if (execve(full_path, argcc, environ) == -1)
+						break;
+				}
+				else
+				{
+					printf("Executable file does not exist or is not executable.\n");
+					exit(EXIT_FAILURE);
+				}
+			}
+			else
+				wait(NULL);
+
+// end
+/*		if (get_fullpath(argcc[0], full_path))
 		{
 			pid = fork();
 			if (pid == 0)
@@ -100,6 +128,7 @@ int	main(void)
 		}
 		else
 			printf("Executable file does not exist or is not executable.\n");
+*/
 		free(read_line);
 		free_double_pointer(argcc);
 	}

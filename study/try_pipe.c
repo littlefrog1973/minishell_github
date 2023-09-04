@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 16:07:16 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/08/18 13:19:43 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/08/23 16:51:06 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,13 @@ int	main(int argc, char *argv[])
 		close(fd[1]);	// after wrote to write side of pipe close it
 	}
 	else
-	{	wait(NULL);
+	{
+		wait(NULL);
 		close(fd[1]);	// close write side of pipe in parent process
 		int	y;
 		read(fd[0], &y, sizeof(int));
 		close(fd[0]);
-		printf("Got from child process: %d\n", y);
+		printf("Got from child process: %d\n", y * 10);
 	}
 	return (0);
 }
