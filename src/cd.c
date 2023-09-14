@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 15:01:31 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/14 16:26:52 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/14 23:08:03 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	cd(int argc, char **argv, char **env)
 	else if (argc == 2)
 	{
 		if (chdir(argv[1]) == -1)
-		return (printf("minishell: cd: %s: No such file or directory", argv[1]), 1);
+		return (perror("minishell: cd"), 1);
 	}
 	else
 	{
