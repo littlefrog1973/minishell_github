@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 14:57:51 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/08/31 14:58:04 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/06 16:05:26 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int main() {
         if (c == 'q') {
             break;
         }
-
+//        write(STDOUT_FILENO, &c, 1);
         printf("You typed: %c\n", c);
     }
 
