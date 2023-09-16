@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
+/*   By: pboonpro <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 15:01:31 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/14 23:08:03 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/16 18:37:58 by pboonpro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	cd(int argc, char **argv, char **env)
 	else if (argc == 2)
 	{
 		if (chdir(argv[1]) == -1)
-		return (perror("minishell: cd"), 1);
+			return (perror("minishell: cd"), 1);
 	}
 	else
 	{
