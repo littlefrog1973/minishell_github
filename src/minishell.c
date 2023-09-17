@@ -6,22 +6,11 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/14 16:47:58 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/16 18:53:43 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	free_double_pointer(char **argc)
-{
-	int	i;
-
-	i = -1;
-	while (argc[++i])
-		free(argc[i]);
-	if (argc)
-		free(argc);
-}
 
 void	return_promt(int signum)
 {
@@ -92,11 +81,15 @@ int	main(int argc, char *argv[], char *environ[])
 	char		**argcc;
 	pid_t		pid;
 	char		full_path[PATH_MAX];
+	char		**new_env;
 
 	void_arg(&argc, argv);
 	signal(SIGINT, return_promt);
 	signal(SIGQUIT, return_promt);
 	rl_catch_signals = 0;
+	new_env = env_dup(environ, NULL);
+	if (!new_env)
+		return (perror("minishell:"), 1);
 	while (1)
 	{
 		read_line = readline(PROMPT);
@@ -117,7 +110,7 @@ int	main(int argc, char *argv[], char *environ[])
 		}
 		if (!ft_strncmp(read_line, "cd", 2))
 		{
-			cd((int) count_str(argcc), argcc, environ);
+			cd((int) count_str(argcc), argcc, &new_env);
 			free(read_line);
 			free_double_pointer(argcc);
 			continue;
