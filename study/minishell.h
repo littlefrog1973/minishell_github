@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/08/22 16:04:58 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/15 10:53:35 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,13 @@ char	*readline_wrap(const char *prompt);
 
 /*get_token.c*/
 char	*get_token(char *line, char *delimit);
+
+/*utils.c*/
+char	**env_dup(char **env);
+ssize_t	search_str(char *str[], char *search);
+size_t	count_str(char *str[]);
+void	perr(char *s);
+void	free_double_pointer(char **temp, int i);
+
+
 #endif
