@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/16 18:53:43 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/18 17:09:47 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,14 @@ char	*parse_line(char *read_line)
 {
 	char	*temp;
 
+	if (!read_line)
+		return (NULL);
 	temp = ft_strtrim(read_line, WHITE_SPACE);
 	if (temp == NULL)
 	{
 		free (read_line);
-		exit (1);
+		return (NULL);
+//		exit (1);
 	}
 	free (read_line);
 	return (temp);
@@ -98,14 +101,21 @@ int	main(int argc, char *argv[], char *environ[])
 		if (!read_line || !ft_strncmp(read_line, "exit", sizeof("exit")))
 		{
 			if (!read_line)
-				printf("\n");
+			{
+				printf("exit\n");
+				rl_clear_history();
+				exit (1);
+			}
 			free(read_line);
-			break;
+			rl_clear_history();
+			exit (1);
+//			break;
 		}
 		argcc = ft_split(read_line, ' ');
 		if (argcc == NULL)
 		{
 			free (read_line);
+			rl_clear_history();
 			exit (1);
 		}
 		if (!ft_strncmp(read_line, "cd", 2))

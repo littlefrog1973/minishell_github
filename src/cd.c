@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 15:01:31 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/18 15:26:11 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/18 23:12:14 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@ int	cd(int argc, char **argv, char ***env)
 	char	*pwd;
 	char	**new_env;
 	char	*old_pwd;
+	char	buff[BUFSIZ];
 
 	pwd = &((*env)[search_str(*env, "PWD=")][4]);
+	ft_bzero(buff, BUFSIZ);
 	if (argc > 2)
 		return(perr("minishell: cd: too many arguments\n"), 1);
 	else if (argc == 2)
@@ -27,35 +29,27 @@ int	cd(int argc, char **argv, char ***env)
 			return (perror("minishell: cd"), 1);
 		else
 		{
-			old_pwd = ft_calloc(ft_strlen(pwd) + 8, sizeof(char));
-			if (!old_pwd)
-				return (free_double_pointer(argv), free_double_pointer(*env), 1);
-			ft_strlcpy(old_pwd, "OLDPWD=", 8);
-			ft_strlcat(old_pwd, pwd, (size_t) (ft_strlen(pwd) + 1 + ft_strlen(old_pwd)));
-			new_env = env_dup(*env, old_pwd);
+			ft_strlcpy(buff, "OLDPWD=", 8);
+			ft_strlcat(buff, pwd, (size_t) (ft_strlen(pwd) + 1 + ft_strlen(buff)));
+			new_env = env_dup(*env, buff);
 			if (!new_env)
 				return (free_double_pointer(argv), free_double_pointer(*env), 1);
 			free_double_pointer(*env);
 			old_pwd = new_env[search_str(new_env, "PWD=")];
-			pwd = ft_calloc(ft_strlen(argv[1]) + 5, sizeof(char));
+			pwd = getcwd(NULL, 0);
 			if (!pwd)
 				return (free_double_pointer(argv), free_double_pointer(new_env), 1);
-			ft_strlcpy(pwd, "PWD=", 5);
-			ft_strlcat(pwd, argv[1], (size_t) (ft_strlen(argv[1]) + 1 + ft_strlen(pwd)));
-			new_env[search_str(new_env, "PWD=")] = pwd;
-			free(old_pwd);
+			new_env[search_str(new_env, "PWD=")] = ft_strjoin("PWD=", pwd);
 			*env = new_env;
-			return (0);
+			return (free(old_pwd), free(pwd), 0);
 		}
 	}
 	else
 	{
-		old_pwd = ft_calloc(ft_strlen(pwd) + 8, sizeof(char));
-		if (!old_pwd)
-			return (free_double_pointer(argv), free_double_pointer(*env), 1);
-		ft_strlcpy(old_pwd, "OLDPWD=", 8);
-		ft_strlcat(old_pwd, pwd, (size_t) (ft_strlen(pwd) + 1 + ft_strlen(old_pwd)));
-		new_env = env_dup(*env, old_pwd);
+		ft_bzero(buff, BUFSIZ);
+		ft_strlcpy(buff, "OLDPWD=", 8);
+		ft_strlcat(buff, pwd, (size_t) (ft_strlen(pwd) + 1 + ft_strlen(buff)));
+		new_env = env_dup(*env, buff);
 		if (!new_env)
 			return (free_double_pointer(argv), free_double_pointer(*env), 1);
 		free_double_pointer(*env);

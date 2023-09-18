@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 15:31:13 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/15 15:07:21 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/18 16:13:40 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ ssize_t	new_str(char **env, char *add_line)
 
 char	**env_dup(char **env, char *add_line)
 {
-	int		i;
+	size_t	i;
 	char	**temp;
 
 	i = 0;
@@ -77,7 +77,7 @@ char	**env_dup(char **env, char *add_line)
 		i++;
 	if (add_line)
 		i += (new_str(env, add_line) < 0);
-	temp = (char **) malloc(++i * sizeof(char *));
+	temp = (char **) ft_calloc(++i, sizeof(char *));
 	if (temp == NULL)
 		return ((char **) NULL);
 	else
