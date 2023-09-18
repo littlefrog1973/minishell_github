@@ -6,9 +6,10 @@
 /*   By: pboonpro <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 15:01:31 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/17 19:31:01 by pboonpro         ###   ########.fr       */
+/*   Updated: 2023/09/18 20:28:07 by pboonpro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 
 #include "minishell.h"
@@ -19,7 +20,7 @@ int	cd(int argc, char **argv, char ***env)
 	char	**new_env;
 	char	*old_pwd;
 
-	pwd = &(*env[search_str(*env, "PWD=")][4]);
+	pwd = &((*env)[search_str(*env, "PWD=")][4]);
 	if (argc > 2)
 		return(perr("minishell: cd: too many arguments\n"), 1);
 	else if (argc == 2)
@@ -69,7 +70,7 @@ int	cd(int argc, char **argv, char ***env)
 		new_env[search_str(new_env, "PWD=")] = pwd;
 		free(old_pwd);
 		*env = new_env;
-		chdir(&(*env[search_str(*env, "HOME=")][5]));
+		chdir(&((*env)[search_str(*env, "HOME=")][5]));
 		return (0);
 	}
 	return (1);

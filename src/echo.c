@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	echo_fun()
+void	echo_fun(char **)
 {
-	
+
 }
