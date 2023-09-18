@@ -39,7 +39,7 @@ void	echo_fun(char **argv)
 	while (argv[i])
 	{
 		printf("%s", argv[i]);
-		if (argv[i] && i != count - 1)
+		if (i != count - 1)
 			printf(" ");
 		i++;
 	}
