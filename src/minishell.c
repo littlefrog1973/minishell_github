@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
+/*   By: littlefrog <littlefrog@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/19 11:59:33 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/19 12:57:09 by littlefrog       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,11 @@ int	main(int argc, char *argv[], char *environ[])
 			if (!read_line)
 			{
 				printf("exit\n");
+				free_duo_ptr(new_env);
 				rl_clear_history();
 				exit (1);
 			}
+			free_duo_ptr(new_env);
 			free(read_line);
 			rl_clear_history();
 			exit (1);
@@ -144,6 +146,8 @@ int	main(int argc, char *argv[], char *environ[])
 		free(read_line);
 		free_duo_ptr(argcc);
 	}
+	if (new_env)
+		free_duo_ptr(new_env);
 	rl_clear_history();
 	return (0);
 }
