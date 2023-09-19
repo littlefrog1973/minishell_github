@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 15:31:13 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/18 16:13:40 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/19 11:59:46 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	perr(char *s)
 		write(2, s++, 1);
 }
 
-void	free_double_pointer(char **argc)
+void	free_duo_ptr(char **argc)
 {
 	int	i;
 
@@ -71,40 +71,35 @@ char	**env_dup(char **env, char *add_line)
 {
 	size_t	i;
 	char	**temp;
+	char	*line_to_add;
 
-	i = 0;
-	while(env[i] != NULL)
-		i++;
+	i = count_str(env);
 	if (add_line)
 		i += (new_str(env, add_line) < 0);
 	temp = (char **) ft_calloc(++i, sizeof(char *));
-	if (temp == NULL)
-		return ((char **) NULL);
+	if (!temp)
+		return (perror("cd"), (char **) NULL);
 	else
 	{
 		i = -1;
 		while(env[++i] != NULL)
 		{
-			temp[i] = ft_calloc((ft_strlen(env[i]) + 1), sizeof(char));
+			temp[i] = ft_strdup(env[i]);
 			if (temp[i] == NULL)
-			{
-				free_double_pointer(temp);
-				return ((char **) NULL);
-			}
-			else
-			{
-				ft_strlcpy(temp[i], env[i], ft_strlen(env[i]) + 1);
-			}
+				return (free_duo_ptr(temp), perror("cd"), (char **) NULL);
 		}
 		if (add_line)
 		{
+			line_to_add = ft_strdup(add_line);
+			if (!line_to_add)
+				return (free_duo_ptr(temp), perror("cd"), (char **) NULL);
 			if (new_str(env, add_line) >= 0)
 			{
 				free(temp[new_str(env, add_line)]);
-				temp[new_str(env, add_line)] = ft_strdup(add_line);
+				temp[new_str(env, add_line)] = line_to_add;
 			}
 			else
-				temp[i] = ft_strdup(add_line);
+				temp[i] = line_to_add;
 		}
 	}
 	return (temp);

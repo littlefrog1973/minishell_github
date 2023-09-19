@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/18 17:09:47 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/19 11:59:33 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int	main(int argc, char *argv[], char *environ[])
 		{
 			cd((int) count_str(argcc), argcc, &new_env);
 			free(read_line);
-			free_double_pointer(argcc);
+			free_duo_ptr(argcc);
 			continue;
 		}
 		pid = fork();
@@ -142,7 +142,7 @@ int	main(int argc, char *argv[], char *environ[])
 		else
 			wait(NULL);
 		free(read_line);
-		free_double_pointer(argcc);
+		free_duo_ptr(argcc);
 	}
 	rl_clear_history();
 	return (0);

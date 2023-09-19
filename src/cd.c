@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 15:01:31 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/19 09:06:20 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/19 11:59:33 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,15 @@ int	cd(int argc, char **argv, char ***env)
 			ft_strlcat(buff, pwd, (size_t) (ft_strlen(pwd) + 1 + ft_strlen(buff)));
 			new_env = env_dup(*env, buff);
 			if (!new_env)
-				return (free_double_pointer(argv), free_double_pointer(*env), 1);
-			free_double_pointer(*env);
+				return (free_duo_ptr(argv), free_duo_ptr(*env), 1);
+			free_duo_ptr(*env);
 			old_pwd = new_env[search_str(new_env, "PWD=")];
 			pwd = getcwd(NULL, 0);
 			if (!pwd)
-				return (free_double_pointer(argv), free_double_pointer(new_env), 1);
+				return (free_duo_ptr(argv), free_duo_ptr(new_env), 1);
 			new_env[search_str(new_env, "PWD=")] = ft_strjoin("PWD=", pwd);
 			if (new_env[search_str(new_env, "PWD=")] == NULL)
-				return (free_double_pointer(argv), free_double_pointer(new_env), 1);
+				return (free_duo_ptr(argv), free_duo_ptr(new_env), 1);
 			*env = new_env;
 			return (free(old_pwd), free(pwd), 0);
 		}
@@ -61,39 +61,45 @@ int	cd(int argc, char **argv, char ***env)
 			ft_strlcat(buff, pwd, (size_t) (ft_strlen(pwd) + 1 + ft_strlen(buff)));
 			new_env = env_dup(*env, buff);
 			if (!new_env)
-				return (free_double_pointer(argv), free_double_pointer(*env), 1);
-			free_double_pointer(*env);
+				return (free_duo_ptr(argv), free_duo_ptr(*env), 1);
+			free_duo_ptr(*env);
 			old_pwd = new_env[search_str(new_env, "PWD=")];
 			pwd = getcwd(NULL, 0);
 			if (!pwd)
-				return (free_double_pointer(argv), free_double_pointer(new_env), 1);
+				return (free_duo_ptr(argv), free_duo_ptr(new_env), 1);
 			new_env[search_str(new_env, "PWD=")] = ft_strjoin("PWD=", pwd);
 			if (new_env[search_str(new_env, "PWD=")] == NULL)
-				return (free_double_pointer(argv), free_double_pointer(new_env), 1);
+				return (free_duo_ptr(argv), free_duo_ptr(new_env), 1);
 			*env = new_env;
 			return (free(old_pwd), free(pwd), 0);
 		}
 	}
 	else
 	{
-		ft_bzero(buff, BUFSIZ);
+//		ft_bzero(buff, BUFSIZ);
 		ft_strlcpy(buff, "OLDPWD=", 8);
 		ft_strlcat(buff, pwd, (size_t) (ft_strlen(pwd) + 1 + ft_strlen(buff)));
 		new_env = env_dup(*env, buff);
 		if (!new_env)
-			return (free_double_pointer(argv), free_double_pointer(*env), 1);
-		free_double_pointer(*env);
+			return (free_duo_ptr(argv), free_duo_ptr(*env), 1);
+		free_duo_ptr(*env);
 		old_pwd = new_env[search_str(new_env, "PWD=")];
-		pwd = ft_calloc(ft_strlen(&new_env[search_str(new_env, "HOME=")][5]) + 6, sizeof(char));
+		pwd = getcwd(NULL, 0);
+//		pwd = ft_calloc(ft_strlen(&new_env[search_str(new_env, "HOME=")][5]) + 6, sizeof(char));
 		if (!pwd)
-			return (free_double_pointer(argv), free_double_pointer(new_env), 1);
-		ft_strlcpy(pwd, "PWD=", 5);
-		ft_strlcat(pwd, &new_env[search_str(new_env, "HOME=")][5], (size_t) (ft_strlen(&new_env[search_str(new_env, "HOME=")][5]) + 1 + ft_strlen(pwd)));
-		new_env[search_str(new_env, "PWD=")] = pwd;
-		free(old_pwd);
+			return (free_duo_ptr(argv), free_duo_ptr(new_env), 1);
+//		ft_strlcpy(pwd, "PWD=", 5);
+//		ft_strlcat(pwd, &new_env[search_str(new_env, "HOME=")][5], (size_t) (ft_strlen(&new_env[search_str(new_env, "HOME=")][5]) + 1 + ft_strlen(pwd)));
+		new_env[search_str(new_env, "PWD=")] = ft_strjoin("PWD=", pwd);
+		if (new_env[search_str(new_env, "PWD=")] == NULL)
+			return (free_duo_ptr(argv), free_duo_ptr(new_env), 1);
+
+//		new_env[search_str(new_env, "PWD=")] = pwd;
+//		free(old_pwd);
 		*env = new_env;
 		chdir(&((*env)[search_str(*env, "HOME=")][5]));
-		return (0);
+//		return (0);
+		return (free(old_pwd), free(pwd), 0);
 	}
 	return (1);
 }
