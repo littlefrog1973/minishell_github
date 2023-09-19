@@ -57,3 +57,4 @@ LICENSE
 minishell
 get_token
 try_getenv
+*.txt

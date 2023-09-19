@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
+/*   By: littlefrog <littlefrog@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/16 18:53:43 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/19 12:57:09 by littlefrog       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,14 @@ char	*parse_line(char *read_line)
 {
 	char	*temp;
 
+	if (!read_line)
+		return (NULL);
 	temp = ft_strtrim(read_line, WHITE_SPACE);
 	if (temp == NULL)
 	{
 		free (read_line);
-		exit (1);
+		return (NULL);
+//		exit (1);
 	}
 	free (read_line);
 	return (temp);
@@ -98,21 +101,30 @@ int	main(int argc, char *argv[], char *environ[])
 		if (!read_line || !ft_strncmp(read_line, "exit", sizeof("exit")))
 		{
 			if (!read_line)
-				printf("\n");
+			{
+				printf("exit\n");
+				free_duo_ptr(new_env);
+				rl_clear_history();
+				exit (1);
+			}
+			free_duo_ptr(new_env);
 			free(read_line);
-			break;
+			rl_clear_history();
+			exit (1);
+//			break;
 		}
 		argcc = ft_split(read_line, ' ');
 		if (argcc == NULL)
 		{
 			free (read_line);
+			rl_clear_history();
 			exit (1);
 		}
 		if (!ft_strncmp(read_line, "cd", 2))
 		{
 			cd((int) count_str(argcc), argcc, &new_env);
 			free(read_line);
-			free_double_pointer(argcc);
+			free_duo_ptr(argcc);
 			continue;
 		}
 		pid = fork();
@@ -132,8 +144,10 @@ int	main(int argc, char *argv[], char *environ[])
 		else
 			wait(NULL);
 		free(read_line);
-		free_double_pointer(argcc);
+		free_duo_ptr(argcc);
 	}
+	if (new_env)
+		free_duo_ptr(new_env);
 	rl_clear_history();
 	return (0);
 }
