@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 15:01:31 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/18 23:12:14 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/19 09:06:20 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	cd(int argc, char **argv, char ***env)
 	ft_bzero(buff, BUFSIZ);
 	if (argc > 2)
 		return(perr("minishell: cd: too many arguments\n"), 1);
-	else if (argc == 2)
+	else if (argc == 2 && (argv[1][0] != '-'))
 	{
 		if (chdir(argv[1]) == -1)
 			return (perror("minishell: cd"), 1);
@@ -40,6 +40,36 @@ int	cd(int argc, char **argv, char ***env)
 			if (!pwd)
 				return (free_double_pointer(argv), free_double_pointer(new_env), 1);
 			new_env[search_str(new_env, "PWD=")] = ft_strjoin("PWD=", pwd);
+			if (new_env[search_str(new_env, "PWD=")] == NULL)
+				return (free_double_pointer(argv), free_double_pointer(new_env), 1);
+			*env = new_env;
+			return (free(old_pwd), free(pwd), 0);
+		}
+	}
+	else if (argc == 2 && (argv[1][0] == '-'))
+	{
+		if (search_str(*env, "OLDPWD=") < 0)
+		{
+			printf("-minishell: cd: OLDPWD not set\n");
+			return (1);
+		}
+		else
+		{
+			if (chdir(&(*env)[search_str(*env, "OLDPWD=")][7]) == -1)
+				return (perror("minishell: cd"), 1);
+			ft_strlcpy(buff, "OLDPWD=", 8);
+			ft_strlcat(buff, pwd, (size_t) (ft_strlen(pwd) + 1 + ft_strlen(buff)));
+			new_env = env_dup(*env, buff);
+			if (!new_env)
+				return (free_double_pointer(argv), free_double_pointer(*env), 1);
+			free_double_pointer(*env);
+			old_pwd = new_env[search_str(new_env, "PWD=")];
+			pwd = getcwd(NULL, 0);
+			if (!pwd)
+				return (free_double_pointer(argv), free_double_pointer(new_env), 1);
+			new_env[search_str(new_env, "PWD=")] = ft_strjoin("PWD=", pwd);
+			if (new_env[search_str(new_env, "PWD=")] == NULL)
+				return (free_double_pointer(argv), free_double_pointer(new_env), 1);
 			*env = new_env;
 			return (free(old_pwd), free(pwd), 0);
 		}
