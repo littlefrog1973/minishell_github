@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/19 22:49:47 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/21 10:18:45 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,8 @@ char	**env_dup(char **env, char *add_line);
 
 /*cd.c*/
 int		cd(int argc, char **argv, char ***env);
+
+/*export.c*/
+int		export(int argc, char **argv, char ***env);
 
 #endif

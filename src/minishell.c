@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: littlefrog <littlefrog@student.42.fr>      +#+  +:+       +#+        */
+/*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/19 12:57:09 by littlefrog       ###   ########.fr       */
+/*   Updated: 2023/09/21 14:43:13 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	main(int argc, char *argv[], char *environ[])
 		read_line = readline(PROMPT);
 		add_history(read_line);
 		read_line = parse_line(read_line);
-		if (!read_line || !ft_strncmp(read_line, "exit", sizeof("exit")))
+		if (!read_line || !ft_strncmp(read_line, "exit", sizeof("exit") - 1))
 		{
 			if (!read_line)
 			{
@@ -120,9 +120,16 @@ int	main(int argc, char *argv[], char *environ[])
 			rl_clear_history();
 			exit (1);
 		}
-		if (!ft_strncmp(read_line, "cd", 2))
+		if (!ft_strncmp(read_line, "cd", sizeof("cd") - 1))
 		{
 			cd((int) count_str(argcc), argcc, &new_env);
+			free(read_line);
+			free_duo_ptr(argcc);
+			continue;
+		}
+		if (!ft_strncmp(read_line, "export", sizeof("export") - 1))
+		{
+			export((int) count_str(argcc), argcc, &new_env);
 			free(read_line);
 			free_duo_ptr(argcc);
 			continue;
