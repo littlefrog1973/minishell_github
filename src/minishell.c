@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/22 09:13:03 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/22 12:58:02 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,6 @@ int	get_fullpath(const char *line, char *full_path)
 	}
 	return (0);
 }
-/*
-char	*get_readline(char *line)
-{
-	line = readline(PROMPT);
-	if (line[0] != EOF)
-		return (line);
-	else
-		return (NULL);
-}
-*/
-
 
 void	void_arg(int *argc, char **argv)
 {
@@ -129,6 +118,13 @@ int	main(int argc, char *argv[], char *environ[])
 		if (!ft_strncmp(read_line, "export", sizeof("export") - 1))
 		{
 			export((int) count_str(argcc), argcc, &new_env);
+			free(read_line);
+			free_duo_ptr(argcc);
+			continue;
+		}
+		if (!ft_strncmp(read_line, "unset", sizeof("unset") - 1))
+		{
+			unset((int) count_str(argcc), argcc, &new_env);
 			free(read_line);
 			free_duo_ptr(argcc);
 			continue;

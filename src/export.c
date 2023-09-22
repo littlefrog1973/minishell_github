@@ -6,13 +6,13 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 10:00:49 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/22 09:01:06 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/22 12:25:45 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_env(char **env)
+static void	print_env(char **env)
 {
 	char	buff[BUFSIZ];
 	size_t	equal_pos;
@@ -36,7 +36,7 @@ void	print_env(char **env)
 	}
 }
 
-char	**add_env(char ***env, char *pwd)
+static char	**add_env(char ***env, char *pwd)
 {
 	char	**new_env;
 	ssize_t	i;
@@ -57,7 +57,7 @@ char	**add_env(char ***env, char *pwd)
 	return (new_env);
 }
 
-char	**change_env(char ***env, char *pwd)
+static char	**change_env(char ***env, char *pwd)
 {
 	char	buff[BUFSIZ];
 	size_t	change_pos;
@@ -78,7 +78,7 @@ char	**change_env(char ***env, char *pwd)
 	return (*env);
 }
 
-static void	set_str(int arc, char *arv[], char *str)
+void	set_str(int arc, char *arv[], char *str)
 {
 	if (ft_strchr(arv[arc], '='))
 		ft_strlcpy(str, arv[arc], ft_strchr(arv[arc], '=') - arv[arc] + 1);
@@ -95,7 +95,6 @@ int	export(int arc, char **arv, char ***env)
 		return (print_env((*env)), 0);
 	while (--arc > 0)
 	{
-		ft_memset(str, 0, BUFSIZ);
 		set_str(arc, arv, str);
 		if (search_str(*env, str) >= 0)
 		{
