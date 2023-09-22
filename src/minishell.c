@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/21 14:43:13 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/22 09:13:03 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,20 +105,19 @@ int	main(int argc, char *argv[], char *environ[])
 				printf("exit\n");
 				free_duo_ptr(new_env);
 				rl_clear_history();
-				exit (1);
+				exit (EXIT_FAILURE);
 			}
 			free_duo_ptr(new_env);
 			free(read_line);
 			rl_clear_history();
-			exit (1);
-//			break;
+			exit (EXIT_SUCCESS);
 		}
 		argcc = ft_split(read_line, ' ');
 		if (argcc == NULL)
 		{
 			free (read_line);
 			rl_clear_history();
-			exit (1);
+			exit (EXIT_FAILURE);
 		}
 		if (!ft_strncmp(read_line, "cd", sizeof("cd") - 1))
 		{
@@ -156,5 +155,5 @@ int	main(int argc, char *argv[], char *environ[])
 	if (new_env)
 		free_duo_ptr(new_env);
 	rl_clear_history();
-	return (0);
+	return (EXIT_SUCCESS);
 }
