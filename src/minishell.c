@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/22 12:58:02 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/22 13:11:06 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,16 @@ void	return_promt(int signum)
 	}
 }
 
-int	get_fullpath(const char *line, char *full_path)
+int	get_fullpath(const char *line, char *full_path, char **env)
 {
 	char	*path;
 	char	*temp;
 
-	path = getenv("PATH");
+//	path = getenv("PATH");
+	if (search_str(env, "PATH") >= 0)
+		path = &env[search_str(env, "PATH=")][sizeof("PATH=") - 1];
+	else
+		return (0);
 	temp = get_token(path, ":");
 	while (temp)
 	{
@@ -132,7 +136,7 @@ int	main(int argc, char *argv[], char *environ[])
 		pid = fork();
 		if (pid == 0)
 		{
-			if (get_fullpath(argcc[0], full_path))
+			if (get_fullpath(argcc[0], full_path, new_env))
 			{
 				if (execve(full_path, argcc, environ) == -1)
 					break;
