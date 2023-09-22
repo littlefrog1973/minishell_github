@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: littlefrog <littlefrog@student.42.fr>      +#+  +:+       +#+        */
+/*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/19 12:57:09 by littlefrog       ###   ########.fr       */
+/*   Updated: 2023/09/22 13:11:06 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,16 @@ void	return_promt(int signum)
 	}
 }
 
-int	get_fullpath(const char *line, char *full_path)
+int	get_fullpath(const char *line, char *full_path, char **env)
 {
 	char	*path;
 	char	*temp;
 
-	path = getenv("PATH");
+//	path = getenv("PATH");
+	if (search_str(env, "PATH") >= 0)
+		path = &env[search_str(env, "PATH=")][sizeof("PATH=") - 1];
+	else
+		return (0);
 	temp = get_token(path, ":");
 	while (temp)
 	{
@@ -43,17 +47,6 @@ int	get_fullpath(const char *line, char *full_path)
 	}
 	return (0);
 }
-/*
-char	*get_readline(char *line)
-{
-	line = readline(PROMPT);
-	if (line[0] != EOF)
-		return (line);
-	else
-		return (NULL);
-}
-*/
-
 
 void	void_arg(int *argc, char **argv)
 {
@@ -98,31 +91,44 @@ int	main(int argc, char *argv[], char *environ[])
 		read_line = readline(PROMPT);
 		add_history(read_line);
 		read_line = parse_line(read_line);
-		if (!read_line || !ft_strncmp(read_line, "exit", sizeof("exit")))
+		if (!read_line || !ft_strncmp(read_line, "exit", sizeof("exit") - 1))
 		{
 			if (!read_line)
 			{
 				printf("exit\n");
 				free_duo_ptr(new_env);
 				rl_clear_history();
-				exit (1);
+				exit (EXIT_FAILURE);
 			}
 			free_duo_ptr(new_env);
 			free(read_line);
 			rl_clear_history();
-			exit (1);
-//			break;
+			exit (EXIT_SUCCESS);
 		}
 		argcc = ft_split(read_line, ' ');
 		if (argcc == NULL)
 		{
 			free (read_line);
 			rl_clear_history();
-			exit (1);
+			exit (EXIT_FAILURE);
 		}
-		if (!ft_strncmp(read_line, "cd", 2))
+		if (!ft_strncmp(read_line, "cd", sizeof("cd") - 1))
 		{
 			cd((int) count_str(argcc), argcc, &new_env);
+			free(read_line);
+			free_duo_ptr(argcc);
+			continue;
+		}
+		if (!ft_strncmp(read_line, "export", sizeof("export") - 1))
+		{
+			export((int) count_str(argcc), argcc, &new_env);
+			free(read_line);
+			free_duo_ptr(argcc);
+			continue;
+		}
+		if (!ft_strncmp(read_line, "unset", sizeof("unset") - 1))
+		{
+			unset((int) count_str(argcc), argcc, &new_env);
 			free(read_line);
 			free_duo_ptr(argcc);
 			continue;
@@ -130,7 +136,7 @@ int	main(int argc, char *argv[], char *environ[])
 		pid = fork();
 		if (pid == 0)
 		{
-			if (get_fullpath(argcc[0], full_path))
+			if (get_fullpath(argcc[0], full_path, new_env))
 			{
 				if (execve(full_path, argcc, environ) == -1)
 					break;
@@ -149,5 +155,5 @@ int	main(int argc, char *argv[], char *environ[])
 	if (new_env)
 		free_duo_ptr(new_env);
 	rl_clear_history();
-	return (0);
+	return (EXIT_SUCCESS);
 }
