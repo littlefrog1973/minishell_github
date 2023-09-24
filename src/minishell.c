@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/22 13:11:06 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/23 00:56:31 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	get_fullpath(const char *line, char *full_path, char **env)
 	char	*path;
 	char	*temp;
 
-//	path = getenv("PATH");
 	if (search_str(env, "PATH") >= 0)
 		path = &env[search_str(env, "PATH=")][sizeof("PATH=") - 1];
 	else
@@ -65,7 +64,6 @@ char	*parse_line(char *read_line)
 	{
 		free (read_line);
 		return (NULL);
-//		exit (1);
 	}
 	free (read_line);
 	return (temp);

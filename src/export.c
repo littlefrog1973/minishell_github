@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 10:00:49 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/22 12:25:45 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/24 22:48:42 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,13 @@ int	export(int arc, char **arv, char ***env)
 		}
 		else
 		{
-			new_env = add_env(env, arv[arc]);
+			new_env = *env;
+			new_env = add_env(&new_env, arv[arc]);
 			if (!new_env)
 				return (free_duo_ptr(arv), free_duo_ptr(*env), 1);
-			return (free_duo_ptr(*env), *env = new_env, 0);
+			free_duo_ptr(*env);
+			*env = new_env;
+			continue ;
 		}
 	}
 	return (0);
