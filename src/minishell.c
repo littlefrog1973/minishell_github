@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/23 00:56:31 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/25 14:14:10 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,11 @@ int	main(int argc, char *argv[], char *environ[])
 	pid_t		pid;
 	char		full_path[PATH_MAX];
 	char		**new_env;
+	int			(*fn_ptr[NUM_BUILTIN + 1])(int, char **, char ***);
+	char		*fn_list[NUM_BUILTIN + 1];
 
+	init_fn_ptr(fn_ptr, fn_list);
+	status = 0;
 	void_arg(&argc, argv);
 	signal(SIGINT, return_promt);
 	signal(SIGQUIT, return_promt);
@@ -110,23 +114,9 @@ int	main(int argc, char *argv[], char *environ[])
 			rl_clear_history();
 			exit (EXIT_FAILURE);
 		}
-		if (!ft_strncmp(read_line, "cd", sizeof("cd") - 1))
+		if (search_str(fn_list, argcc[0]) >= 0)
 		{
-			cd((int) count_str(argcc), argcc, &new_env);
-			free(read_line);
-			free_duo_ptr(argcc);
-			continue;
-		}
-		if (!ft_strncmp(read_line, "export", sizeof("export") - 1))
-		{
-			export((int) count_str(argcc), argcc, &new_env);
-			free(read_line);
-			free_duo_ptr(argcc);
-			continue;
-		}
-		if (!ft_strncmp(read_line, "unset", sizeof("unset") - 1))
-		{
-			unset((int) count_str(argcc), argcc, &new_env);
+			fn_ptr[search_str(fn_list, argcc[0])]((int) count_str(argcc), argcc, &new_env);
 			free(read_line);
 			free_duo_ptr(argcc);
 			continue;
