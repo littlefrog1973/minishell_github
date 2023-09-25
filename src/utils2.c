@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 22:45:00 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/20 05:51:35 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/25 14:24:35 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,3 +63,32 @@ char	**env_dup(char **env, char *add_line)
 	}
 	return (temp);
 }
+
+void	init_fn_ptr(int (*fn_ptr[])(int, char **, char ***), char **list)
+{
+	fn_ptr[0] = cd;
+	fn_ptr[1] = export;
+	fn_ptr[2] = unset;
+	fn_ptr[3] = NULL;
+	list[0] = "cd\0";
+	list[1] = "export\0";
+	list[2] = "unset\0";
+	list[3] = NULL;
+}
+
+/*
+	ft_ptr[0] = echo;
+	ft_ptr[1] = cd;
+	ft_ptr[2] = pwd;
+	ft_ptr[3] = export;
+	ft_ptr[4] = unset;
+	ft_ptr[5] = env;
+	ft_ptr[6] = exit;
+	ft_ptr[7] = NULL;
+	list[0] = "echo\0";
+	list[1] = "cd\0";
+	list[2] = "pwd\0";
+	list[3] = "export\0";
+	list[4] = "unset\0";
+	list[5] = "env\0";
+*/

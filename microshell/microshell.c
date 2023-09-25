@@ -27,13 +27,13 @@ static int exec(char **argv, char **envp, int i) {
 	int pid = fork();
 	if (!pid) {
 		argv[i] = 0;
-		if (pip && (dup2(fds[1], 1) == -1 || close(fds[0]) == -1 || close(fds[1]) == -1))
+		if (pip && (close(fds[0]) == -1 || dup2(fds[1], 1) == -1 || close(fds[1]) == -1))
 			return (perr("error: fatal\n"), 1);
 		execve(*argv, argv, envp);
 		return (perr("error: cannot execute "), perr(*argv), perr("\n"), 1);
 	}
 	waitpid(pid, &status, 0);
-	if (pip && (dup2(fds[0], 0) == -1 || close(fds[0]) == -1 || close(fds[1]) == -1))
+	if (pip && (close(fds[1]) == -1 || dup2(fds[0], 0) == -1 || close(fds[0]) == -1))
 		return (perr("error: fatal\n"), 1);
 	return WIFEXITED(status) && WEXITSTATUS(status);
 }

@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/22 11:28:12 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/25 15:42:14 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 
 # define PROMPT "minishell$>"
 # define WHITE_SPACE "\n\r\f\v\t "
+# define NUM_BUILTIN 3
 
 /*readline.c*/
 char	*readline_wrap(const char *prompt);
@@ -44,6 +45,7 @@ ssize_t	new_str(char **env, char *add_line);
 
 /*utils2.c*/
 char	**env_dup(char **env, char *add_line);
+void	init_fn_ptr(int (*fn_ptr[])(int, char **, char ***), char **list);
 
 /*cd.c*/
 int		cd(int argc, char **argv, char ***env);
@@ -55,4 +57,9 @@ int		export(int argc, char **argv, char ***env);
 /*unset.c*/
 int		unset(int argc, char **argv, char ***env);
 
+/*execute.c*/
+int	exec(char **argv, char **envp, int i);
+
+/*minishell.c*/
+int	get_fullpath(const char *line, char *full_path, char **env);
 #endif
