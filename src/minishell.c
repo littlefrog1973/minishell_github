@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/25 14:14:10 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/25 23:34:45 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,14 @@ int	main(int argc, char *argv[], char *environ[])
 {
 	char		*read_line;
 	char		**argcc;
-	pid_t		pid;
-	char		full_path[PATH_MAX];
+	char		**argcc1;
+//	pid_t		pid;
+//	char		full_path[PATH_MAX];
 	char		**new_env;
 	int			(*fn_ptr[NUM_BUILTIN + 1])(int, char **, char ***);
 	char		*fn_list[NUM_BUILTIN + 1];
+	int			i;
+	int			status;
 
 	init_fn_ptr(fn_ptr, fn_list);
 	status = 0;
@@ -108,19 +111,39 @@ int	main(int argc, char *argv[], char *environ[])
 			exit (EXIT_SUCCESS);
 		}
 		argcc = ft_split(read_line, ' ');
+		argcc1 = argcc;
 		if (argcc == NULL)
 		{
 			free (read_line);
 			rl_clear_history();
 			exit (EXIT_FAILURE);
 		}
+/*
 		if (search_str(fn_list, argcc[0]) >= 0)
 		{
-			fn_ptr[search_str(fn_list, argcc[0])]((int) count_str(argcc), argcc, &new_env);
+			status = fn_ptr[search_str(fn_list, argcc[0])]((int) count_str(argcc), argcc, &new_env);
 			free(read_line);
 			free_duo_ptr(argcc);
 			continue;
 		}
+*/
+		while (*argcc && *(argcc + 1))
+		{
+			if (!ft_strncmp(*argcc, "|", 1))
+				argcc++;
+			i = 0;
+			while (argcc[i] && ft_strncmp(argcc[i], "|", 1))
+				i++;
+			if (search_str(fn_list, argcc[0]) >= 0)
+			{
+				status = fn_ptr[search_str(fn_list, argcc[0])]((int) count_str(argcc), argcc, &new_env);
+			}
+			else if (i)
+				status = exec(argcc, new_env, i);
+			argcc += i;
+		}
+		dup2(0, STDIN_FILENO);
+/*
 		pid = fork();
 		if (pid == 0)
 		{
@@ -137,11 +160,13 @@ int	main(int argc, char *argv[], char *environ[])
 		}
 		else
 			wait(NULL);
+*/
 		free(read_line);
-		free_duo_ptr(argcc);
+		free_duo_ptr(argcc1);
 	}
 	if (new_env)
 		free_duo_ptr(new_env);
 	rl_clear_history();
-	return (EXIT_SUCCESS);
+	return (status);
+//	return (EXIT_SUCCESS);
 }

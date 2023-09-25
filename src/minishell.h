@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/25 14:06:35 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/25 15:42:14 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,9 @@ int		export(int argc, char **argv, char ***env);
 /*unset.c*/
 int		unset(int argc, char **argv, char ***env);
 
+/*execute.c*/
+int	exec(char **argv, char **envp, int i);
+
+/*minishell.c*/
+int	get_fullpath(const char *line, char *full_path, char **env);
 #endif
