@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 15:21:15 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/25 15:48:05 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/26 12:33:41 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,13 @@ int	exec(char **argv, char **envp, int i)
 	waitpid(pid, &status, 0);
 	if (pip && (close(fd[1]) == -1 || dup2(fd[0], STDIN_FILENO) == -1 || close(fd[0]) == -1))
 		return (perror("minishell: exec"), 1);
+	if (!pip) {
+        int original_stdin = open("/dev/tty", O_RDONLY);
+        if (original_stdin != -1) {
+            dup2(original_stdin, STDIN_FILENO);
+            close(original_stdin);
+        }
+    }
+
 	return (WIFEXITED(status) && WEXITSTATUS(status));
 }

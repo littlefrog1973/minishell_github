@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/25 23:34:45 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/26 12:01:47 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int	main(int argc, char *argv[], char *environ[])
 			rl_clear_history();
 			exit (EXIT_FAILURE);
 		}
-/*
+
 		if (search_str(fn_list, argcc[0]) >= 0)
 		{
 			status = fn_ptr[search_str(fn_list, argcc[0])]((int) count_str(argcc), argcc, &new_env);
@@ -126,7 +126,7 @@ int	main(int argc, char *argv[], char *environ[])
 			free_duo_ptr(argcc);
 			continue;
 		}
-*/
+
 		while (*argcc && *(argcc + 1))
 		{
 			if (!ft_strncmp(*argcc, "|", 1))
@@ -134,15 +134,17 @@ int	main(int argc, char *argv[], char *environ[])
 			i = 0;
 			while (argcc[i] && ft_strncmp(argcc[i], "|", 1))
 				i++;
+/*
 			if (search_str(fn_list, argcc[0]) >= 0)
 			{
 				status = fn_ptr[search_str(fn_list, argcc[0])]((int) count_str(argcc), argcc, &new_env);
 			}
 			else if (i)
+*/
+			if (i)
 				status = exec(argcc, new_env, i);
 			argcc += i;
 		}
-		dup2(0, STDIN_FILENO);
 /*
 		pid = fork();
 		if (pid == 0)
@@ -162,7 +164,10 @@ int	main(int argc, char *argv[], char *environ[])
 			wait(NULL);
 */
 		free(read_line);
-		free_duo_ptr(argcc1);
+		if (!(*argcc))
+			free_duo_ptr(argcc1);
+		else
+			free_duo_ptr(argcc);
 	}
 	if (new_env)
 		free_duo_ptr(new_env);
