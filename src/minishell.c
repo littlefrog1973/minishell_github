@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/25 23:34:45 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/26 15:49:38 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,15 +74,13 @@ int	main(int argc, char *argv[], char *environ[])
 	char		*read_line;
 	char		**argcc;
 	char		**argcc1;
-//	pid_t		pid;
-//	char		full_path[PATH_MAX];
 	char		**new_env;
-	int			(*fn_ptr[NUM_BUILTIN + 1])(int, char **, char ***);
-	char		*fn_list[NUM_BUILTIN + 1];
+//	int			(*fn_ptr[NUM_BUILTIN + 1])(int, char **, char ***);
+//	char		*fn_list[NUM_BUILTIN + 1];
 	int			i;
 	int			status;
 
-	init_fn_ptr(fn_ptr, fn_list);
+//	init_fn_ptr(fn_ptr, fn_list);
 	status = 0;
 	void_arg(&argc, argv);
 	signal(SIGINT, return_promt);
@@ -134,15 +132,17 @@ int	main(int argc, char *argv[], char *environ[])
 			i = 0;
 			while (argcc[i] && ft_strncmp(argcc[i], "|", 1))
 				i++;
+/*
 			if (search_str(fn_list, argcc[0]) >= 0)
 			{
 				status = fn_ptr[search_str(fn_list, argcc[0])]((int) count_str(argcc), argcc, &new_env);
 			}
 			else if (i)
+*/
+			if (i)
 				status = exec(argcc, new_env, i);
 			argcc += i;
 		}
-		dup2(0, STDIN_FILENO);
 /*
 		pid = fork();
 		if (pid == 0)
@@ -162,7 +162,10 @@ int	main(int argc, char *argv[], char *environ[])
 			wait(NULL);
 */
 		free(read_line);
-		free_duo_ptr(argcc1);
+		if (!(*argcc))
+			free_duo_ptr(argcc1);
+		else
+			free_duo_ptr(argcc);
 	}
 	if (new_env)
 		free_duo_ptr(new_env);
