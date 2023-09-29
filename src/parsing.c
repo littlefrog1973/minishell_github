@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 12:37:46 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/29 16:17:13 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/29 16:55:29 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,6 @@ char	*put_env(char *command, char **env)
 			i += 2;
 		else if (command[i] == '$' && ft_isalpha(command[i + 1]))
 		{
-/*
-			ft_strlcpy(buf2, &command[i + 1], word_len(&command[i + 1]));
-			ft_strlcat(buf2, "=", word_len(&command[i + 1]) + 2);
-			k = search_str(env, buf2);
-			if (k >= 0)
-				j += ft_strlcpy(&buf[j], &env[k][ft_strlen(buf2)],
-						ft_strlen(&env[k][ft_strlen(buf2)]) + 1);
-			i += word_len(&command[i + 1]) + 1;
-*/
-
 			k = word_len(&command[i + 1]);
 			ft_strlcpy(buf2, &command[i + 1], k + 1);
 			ft_strlcat(buf2, "=", k + 2);
