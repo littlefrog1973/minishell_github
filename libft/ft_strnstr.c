@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdeeyien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 16:58:59 by sdeeyien          #+#    #+#             */
-/*   Updated: 2022/07/22 11:58:19 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/29 08:50:59 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,15 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 }
 /*
 #include <stdio.h>
-#include <string.h>
+#include <bsd/string.h>
 
 int	main(void)
 {
-	char str1[] = "abcdefghij";
-	char *str2 = "";
+	char str1[] = "< test.txt cat";
+	char *str2 = "test.txt";
 
-	printf("%s\n", strnstr(str2, str1, -1));
-	printf("%s\n", ft_strnstr(str2, str1, -1));
+	printf("%s\n", strnstr(str1, str2, 14));
+	printf("%s\n", ft_strnstr(str1, str2, 14));
 	return (0);
-}*/
+}
+*/

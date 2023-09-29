@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/26 15:49:38 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/29 13:10:10 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,34 +53,14 @@ void	void_arg(int *argc, char **argv)
 	(void) argv;
 }
 
-char	*parse_line(char *read_line)
-{
-	char	*temp;
-
-	if (!read_line)
-		return (NULL);
-	temp = ft_strtrim(read_line, WHITE_SPACE);
-	if (temp == NULL)
-	{
-		free (read_line);
-		return (NULL);
-	}
-	free (read_line);
-	return (temp);
-}
 
 int	main(int argc, char *argv[], char *environ[])
 {
 	char		*read_line;
-	char		**argcc;
-	char		**argcc1;
 	char		**new_env;
-//	int			(*fn_ptr[NUM_BUILTIN + 1])(int, char **, char ***);
-//	char		*fn_list[NUM_BUILTIN + 1];
-	int			i;
 	int			status;
+	t_readline	*p_line;
 
-//	init_fn_ptr(fn_ptr, fn_list);
 	status = 0;
 	void_arg(&argc, argv);
 	signal(SIGINT, return_promt);
@@ -93,83 +73,27 @@ int	main(int argc, char *argv[], char *environ[])
 	{
 		read_line = readline(PROMPT);
 		add_history(read_line);
-		read_line = parse_line(read_line);
+		p_line = parsing_line(read_line, new_env);
+		if (!p_line)
+			return(free_duo_ptr(new_env), free(read_line), perror("minishell: main"), 1);
 		if (!read_line || !ft_strncmp(read_line, "exit", sizeof("exit") - 1))
 		{
 			if (!read_line)
 			{
 				printf("exit\n");
 				free_duo_ptr(new_env);
+				free_t_readline(p_line);
 				rl_clear_history();
 				exit (EXIT_FAILURE);
 			}
 			free_duo_ptr(new_env);
 			free(read_line);
+			free_t_readline(p_line);
 			rl_clear_history();
 			exit (EXIT_SUCCESS);
 		}
-		argcc = ft_split(read_line, ' ');
-		argcc1 = argcc;
-		if (argcc == NULL)
-		{
-			free (read_line);
-			rl_clear_history();
-			exit (EXIT_FAILURE);
-		}
-/*
-		if (search_str(fn_list, argcc[0]) >= 0)
-		{
-			status = fn_ptr[search_str(fn_list, argcc[0])]((int) count_str(argcc), argcc, &new_env);
-			free(read_line);
-			free_duo_ptr(argcc);
-			continue;
-		}
-*/
-		while (*argcc && *(argcc + 1))
-		{
-			if (!ft_strncmp(*argcc, "|", 1))
-				argcc++;
-			i = 0;
-			while (argcc[i] && ft_strncmp(argcc[i], "|", 1))
-				i++;
-/*
-			if (search_str(fn_list, argcc[0]) >= 0)
-			{
-				status = fn_ptr[search_str(fn_list, argcc[0])]((int) count_str(argcc), argcc, &new_env);
-			}
-			else if (i)
-*/
-			if (i)
-				status = exec(argcc, new_env, i);
-			argcc += i;
-		}
-/*
-		pid = fork();
-		if (pid == 0)
-		{
-			if (get_fullpath(argcc[0], full_path, new_env))
-			{
-				if (execve(full_path, argcc, environ) == -1)
-					break;
-			}
-			else
-			{
-				printf("Executable file does not exist or is not executable.\n");
-				exit(EXIT_FAILURE);
-			}
-		}
-		else
-			wait(NULL);
-*/
 		free(read_line);
-		if (!(*argcc))
-			free_duo_ptr(argcc1);
-		else
-			free_duo_ptr(argcc);
+		free_t_readline(p_line);
 	}
-	if (new_env)
-		free_duo_ptr(new_env);
-	rl_clear_history();
 	return (status);
-//	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:10:59 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/08/22 23:08:37 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/27 23:55:44 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*get_token(char *line, char *delimit)
 	{
 		token = ft_substr(pointer, 0, (size_t) (ft_strchr(pointer, delimit[0]) - pointer));
 		if (!token)
-			exit (1);
+			return (perror("get_token"), NULL);
 		pointer += (size_t) (ft_strchr(pointer, ':') - pointer) + 1;
 		return (token);
 	}
@@ -31,7 +31,7 @@ char	*get_token(char *line, char *delimit)
 	{
 		token = ft_substr(pointer, 0, ft_strlen(pointer));
 		if (!token)
-			exit (1);
+			return (perror("get_token"), NULL);
 		pointer += ft_strlen(pointer);
 		return (token);
 	}
