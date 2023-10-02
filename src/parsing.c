@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 12:37:46 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/29 16:55:29 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/30 07:44:53 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,30 +19,61 @@ char	*put_env(char *command, char **env)
 	size_t	j;
 	ssize_t	k;
 	char	buf2[BUFSIZ];
+	int		s_quote;
+	int		d_quote;
 
 	ft_memset(buf, 0, BUFSIZ);
 	i = 0;
 	j = 0;
+	s_quote = 0;
+	d_quote = 0;
 	while (command[i])
 	{
-		if (command[i] != '$')
+		if (command[i] == '\'' && !d_quote)
+		{
+			if (!s_quote)
+				s_quote = 1;
+			else
+				s_quote = 0;
+			i++;
+			continue ;
+		}
+		if (command[i] == '"' && !s_quote)
+		{
+			if (!d_quote)
+				d_quote = 1;
+			else
+				d_quote = 0;
+			i++;
+			continue ;
+		}
+		if (s_quote)
 		{
 			buf[j] = command[i];
-			j++;
 			i++;
+			j++;
+			continue;
 		}
-		else if (command[i] == '$' && ft_isdigit(command[i + 1]))
-			i += 2;
-		else if (command[i] == '$' && ft_isalpha(command[i + 1]))
+		if (d_quote || !s_quote)
 		{
-			k = word_len(&command[i + 1]);
-			ft_strlcpy(buf2, &command[i + 1], k + 1);
-			ft_strlcat(buf2, "=", k + 2);
-			if (search_str(env, buf2) >= 0)
-				j += ft_strlcpy(&buf[j], &env[search_str(env, buf2)]
-					[ft_strlen(buf2)], ft_strlen(&env[search_str(env, buf2)]
-						[ft_strlen(buf2)]) + 1);
-			i += k + 1;
+			if (command[i] != '$')
+			{
+				buf[j] = command[i];
+				i++;
+				j++;
+				continue;
+			}
+			else if (command[i] == '$' && ft_isdigit(command[i + 1]))
+				i += 2;
+			else if (command[i] == '$' && ft_isalpha(command[i + 1]))
+			{
+				k = word_len(&command[i + 1]);
+				ft_strlcpy(buf2, &command[i + 1], k + 1);
+				ft_strlcat(buf2, "=", k + 2);
+				if (search_str(env, buf2) >= 0)
+					j += ft_strlcpy(&buf[j], &env[search_str(env, buf2)][ft_strlen(buf2)], ft_strlen(&env[search_str(env, buf2)][ft_strlen(buf2)]) + 1);
+				i += k + 1;
+			}
 		}
 	}
 	return (ft_strdup(buf));
