@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 14:33:09 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/29 14:37:41 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/02 14:51:45 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,7 @@ t_readline	*init_parse_line(void)
 	if (!p_line)
 		return (NULL);
 	p_line->r_line = NULL;
-	p_line->command = (char **) ft_calloc(MAX_PIPE, sizeof(char *));
-	if (!(p_line->command))
-		return (free(p_line), NULL);
+	p_line->command = NULL;
 	p_line->n_pipe = 0;
 	p_line->infile = NULL;
 	p_line->outfile = NULL;

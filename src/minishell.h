@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/29 14:57:17 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:09:37 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,15 @@
 
 typedef struct s_file
 {
-	char	*filename;
-	int		type;
+	char			*filename;
+	int				type;
+	struct s_file	*next;
 }	t_file;
 
 typedef	struct s_readline
 {
 	char				*r_line;
-	char				**command;
+	char				*command;
 	int					n_pipe;
 	t_file				*infile;
 	t_file				*outfile;
@@ -95,7 +96,6 @@ int	get_fullpath(const char *line, char *full_path, char **env);
 // trim white space from front and rear of read_line
 // create and init struct t_readline
 t_readline	*parsing_line(char *r_line, char **env);
-int			free_t_readline(t_readline *p_line);
 
 /*parsing_util.c*/
 int			init_t_file(t_file **file);
@@ -105,6 +105,8 @@ char		*trim_line(char *read_line);
 int			count_pipe(char *r_line);
 
 /*parsing_util2.c*/
-int			free_t_readline(t_readline *p_line);
-char	**del_in_out(char **command, t_file *infile, t_file *outfile);
+void		free_t_readline(t_readline *p_line);
+char		*del_in_out(char *command, t_file *infile, t_file *outfile);
+void		lstadd_back_r_line(t_readline **lst, t_readline *new);
+void		lstclear_r_line(t_readline **lst, void (*del)(t_readline *));
 #endif

@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/29 13:10:10 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:39:43 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,18 +82,18 @@ int	main(int argc, char *argv[], char *environ[])
 			{
 				printf("exit\n");
 				free_duo_ptr(new_env);
-				free_t_readline(p_line);
+				lstclear_r_line(&p_line, free_t_readline);
 				rl_clear_history();
 				exit (EXIT_FAILURE);
 			}
 			free_duo_ptr(new_env);
 			free(read_line);
-			free_t_readline(p_line);
+			lstclear_r_line(&p_line, free_t_readline);
 			rl_clear_history();
 			exit (EXIT_SUCCESS);
 		}
 		free(read_line);
-		free_t_readline(p_line);
+		lstclear_r_line(&p_line, free_t_readline);
 	}
 	return (status);
 }

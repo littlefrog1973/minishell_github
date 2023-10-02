@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 12:37:46 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/30 07:44:53 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:53:32 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,24 +196,32 @@ t_readline	*parsing_line(char *read_line, char **env)
 	t_readline	*p_line;
 	char		**temp;
 	char		*r_line;
+	t_readline	*head;
 
-	p_line = init_parse_line();
-	if (!p_line)
-		return (NULL);
 	r_line = trim_line(read_line);
 	if (!r_line)
-		return (free_t_readline(p_line), NULL);
+		return (NULL);
 	temp = ft_split(r_line, '|');
 	if (!temp)
-		return (free_t_readline(p_line), free(r_line), NULL);
+		return (free(r_line), NULL);
 	temp = interpret(temp, env);
 	if (!temp)
-		return (free_t_readline(p_line), free(r_line), free_duo_ptr(temp),
-			NULL);
-	p_line->n_pipe = count_pipe(r_line);
-	p_line->infile = find_infile(temp[0]);
-	p_line->outfile = find_outfile(temp[count_str(temp) - 1]);
-	p_line->command = del_in_out(temp, p_line->infile, p_line->outfile);
-	p_line->r_line = r_line;
-	return (p_line);
+		return (free(r_line), NULL);
+	head = NULL;
+	while (*temp)
+	{
+		p_line = init_parse_line();
+		if (!p_line)
+			return (free(r_line), free_duo_ptr(temp), lstclear_r_line(&head, free_t_readline), NULL);
+		lstadd_back_r_line(&head, p_line);
+		p_line->n_pipe = count_pipe(r_line);
+		p_line->infile = find_infile(*temp);
+		p_line->outfile = find_outfile(*temp);
+		p_line->r_line = *temp;
+		p_line->command = del_in_out(*temp, p_line->infile, p_line->outfile);
+		if (!p_line->command)
+			return (free(r_line), free_duo_ptr(temp), lstclear_r_line(&head, free_t_readline), NULL);
+		temp++;
+	}
+	return (head);
 }
