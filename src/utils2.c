@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 22:45:00 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/25 14:24:35 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/29 14:36:32 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,3 +92,21 @@ void	init_fn_ptr(int (*fn_ptr[])(int, char **, char ***), char **list)
 	list[4] = "unset\0";
 	list[5] = "env\0";
 */
+
+int	count_char(char *r_line, char to_count)
+// return number of to_count in readline
+{
+	int	n_char;
+	int	i;
+
+	if (!r_line || !(*r_line))
+		return (-1);
+	n_char = 0;
+	i = -1;
+	while (r_line[++i])
+	{
+		if (r_line[i] == to_count)
+			n_char++;
+	}
+	return (n_char);
+}

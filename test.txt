@@ -1,1 +1,2 @@
-This is a line wrote from try_open.c
+     26      26     254
+26

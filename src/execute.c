@@ -6,13 +6,13 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 15:21:15 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/26 17:11:37 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/27 11:38:46 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	exec(char **argv, char **envp, int i)
+int	exec(char **argv, char ***envp, int i)
 {
 	int		status;
 	int 	fd[2];
@@ -34,13 +34,13 @@ int	exec(char **argv, char **envp, int i)
 			return (perror("minishell: exec"), 1);
 		if (search_str(fn_list, argv[0]) >= 0)
 		{
-			status = fn_ptr[search_str(fn_list, argv[0])]((int) count_str(argv), argv, &envp);
+			status = fn_ptr[search_str(fn_list, argv[0])]((int) count_str(argv), argv, envp);
 			exit (0);
 		}
 		else
 		{
-			if (get_fullpath(argv[0], full_path, envp))
-				execve(full_path, argv, envp);
+			if (get_fullpath(argv[0], full_path, *envp))
+				execve(full_path, argv, *envp);
 			return (perr("error: cannot execute"), perr(*argv), perr("\n"), 1);
 		}
 	}

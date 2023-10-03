@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:10:59 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/08/22 23:08:37 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/03 20:38:21 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*get_token(char *line, char *delimit)
 	{
 		token = ft_substr(pointer, 0, (size_t) (ft_strchr(pointer, delimit[0]) - pointer));
 		if (!token)
-			exit (1);
+			return (perror("get_token"), NULL);
 		pointer += (size_t) (ft_strchr(pointer, ':') - pointer) + 1;
 		return (token);
 	}
@@ -31,11 +31,54 @@ char	*get_token(char *line, char *delimit)
 	{
 		token = ft_substr(pointer, 0, ft_strlen(pointer));
 		if (!token)
-			exit (1);
+			return (perror("get_token"), NULL);
 		pointer += ft_strlen(pointer);
 		return (token);
 	}
 	return (NULL);
+}
+
+char	*get_token_file(char *line, char *delimit)
+{
+	static char	*pointer;
+	char		*token;
+	ssize_t		i;
+	size_t		offset;
+
+	offset = 0;
+	if (line != NULL)
+		pointer = line;
+	if (pointer == NULL)
+		return (NULL);
+	if (ft_strchr(pointer, delimit[0]))
+	{
+		pointer = ft_strchr(pointer, delimit[0]) + 1;
+		if (*pointer != delimit[0])
+		{
+			while (ft_isspace(*pointer) && *pointer)
+			{
+				pointer++;
+			}
+			i = -1;
+			while (!ft_isspace(pointer[++i]) && *pointer);
+//				i++;
+		}
+		else
+		{
+			(pointer++, offset++);
+			while (ft_isspace(*pointer) && *pointer)
+				(pointer++, offset++);
+			i = -1;
+			while (!ft_isspace(pointer[++i]) && *pointer);
+		}
+		token = ft_substr(pointer - offset, 0, i + offset);
+		if (!token)
+			return(perror("get_token"), NULL);
+		pointer = ft_strchr(pointer, delimit[0]);
+		return (token);
+	}
+	else
+		return (NULL);
 }
 /*
 int	main(void)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdeeyien <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 11:06:55 by sdeeyien          #+#    #+#             */
-/*   Updated: 2022/10/18 13:42:30 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/09/28 09:10:35 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,13 +125,13 @@ char	**ft_split(char const *s, char c)
 int	main(void)
 {
 //	char str[] = "\0aa\0bbb";
-	char str[] = "ab,cd,ef,f";
+	char str[] = ",ab,cd,ef,f,";
 	char **split;
 	int	i;
 //	size_t	count;
 //	size_t	ttmp_pos[1000];
 
-	split = ft_split(str, '\0');
+	split = ft_split(str, '.');
 	if (!split)
 		exit (1);
 	i = 0;
@@ -141,4 +141,5 @@ int	main(void)
 		i++;
 	}
 	return (0);
-}*/
+}
+*/
