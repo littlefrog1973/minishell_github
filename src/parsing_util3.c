@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 16:01:30 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/03 11:09:01 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/03 22:19:34 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,9 @@ t_file	*find_infile2(char *r_line)
 		infile->filename = token;
 		if (infile->type != HEREDOC)
 			infile->type = INFILE;
-		token = get_token_file(NULL, "<") + !(infile->type != HEREDOC);
+		token = get_token_file(NULL, "<");
+		if (token)
+			 token += !(infile->type != HEREDOC);
 	}
 	return (head);
 }
@@ -65,22 +67,23 @@ t_file	*find_outfile2(char *r_line)
 	int		i;
 	char	*token;
 	char	*line_to_free;
-	t_file	*outfile;
+	t_file	*infile;
 	t_file	*head;
 
 	head = NULL;
-	token = get_token(r_line, ">");
+	token = get_token_file(r_line, ">");
 	if (!token)
 		return (NULL);
-	while (*token)
+	while (token)
 	{
-		outfile	= (t_file*) ft_calloc(1, sizeof(t_file));
-		if (!outfile || !r_line)
-			return (perror("parsing: outfile"), NULL);
-		lstadd_back_t_file(&head, outfile);
+		line_to_free = token;
+		infile	= (t_file*) ft_calloc(1, sizeof(t_file));
+		if (!infile || !r_line)
+			return (perror("minishell: parsing: outfile"), NULL);
+		lstadd_back_t_file(&head, infile);
 		if (*token == '>')
 		{
-			outfile->type = APPEND;
+			infile->type = APPEND;
 			token++;
 		}
 		while (!ft_isalnum(*token))
@@ -91,15 +94,16 @@ t_file	*find_outfile2(char *r_line)
 			if (ft_isspace(token[i]))
 				break ;
 		}
-		line_to_free = token;
 		token = ft_substr(token, 0, i);
 		if (!token)
-			return(perror("parsing: outfile"), free(line_to_free), free(outfile), NULL);
+			return(perror("parsing: outfile"), free(line_to_free), free(infile), NULL);
 		free(line_to_free);
-		outfile->filename = token;
-		if (outfile->type != APPEND)
-			outfile->type = OUTFILE;
-		token = get_token(NULL, "<");
+		infile->filename = token;
+		if (infile->type != APPEND)
+			infile->type = OUTFILE;
+		token = get_token_file(NULL, ">");
+		if (token)
+			 token += !(infile->type != APPEND);
 	}
 	return (head);
 }

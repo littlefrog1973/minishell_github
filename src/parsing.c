@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 12:37:46 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/03 08:14:31 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/03 21:19:46 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,7 @@ t_readline	*parsing_line(char *read_line, char **env)
 		lstadd_back_r_line(&head, p_line);
 		p_line->n_pipe = count_pipe(r_line);
 		p_line->infile = find_infile2(*temp);
-		p_line->outfile = find_outfile(*temp);
+		p_line->outfile = find_outfile2(*temp);
 		p_line->r_line = *temp;
 		p_line->command = del_in_out(*temp, p_line->infile, p_line->outfile);
 		if (!p_line->command)
