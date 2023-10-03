@@ -6,7 +6,7 @@
 #    By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/17 13:45:55 by sdeeyien          #+#    #+#              #
-#    Updated: 2023/09/29 14:55:26 by sdeeyien         ###   ########.fr        #
+#    Updated: 2023/10/03 08:15:23 by sdeeyien         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,8 @@ SRCDIR = ./src/
 OBJDIR =
 DEPS = minishell.h
 
-SRC = minishell.c get_token.c cd.c utils.c utils2.c export.c unset.c execute.c parsing.c parsing_util.c parsing_util2.c
+SRC = minishell.c get_token.c cd.c utils.c utils2.c export.c unset.c execute.c \
+		parsing.c parsing_util.c parsing_util2.c parsing_util3.c
 #SRC = get_token.c try_getpath.c
 #SRC = read_line_with_history.c
 BONUS =

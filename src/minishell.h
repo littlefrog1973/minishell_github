@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/02 15:09:37 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/03 08:43:34 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ char	*readline_wrap(const char *prompt);
 
 /*get_token.c*/
 char	*get_token(char *line, char *delimit);
+char	*get_token_file(char *line, char *delimit);
 
 /*utils.c*/
 void	perr(char *s);
@@ -109,4 +110,12 @@ void		free_t_readline(t_readline *p_line);
 char		*del_in_out(char *command, t_file *infile, t_file *outfile);
 void		lstadd_back_r_line(t_readline **lst, t_readline *new);
 void		lstclear_r_line(t_readline **lst, void (*del)(t_readline *));
+
+/*parsing_util3.c*/
+void		free_t_file(t_file *p_file);
+void		lstadd_back_t_file(t_file **lst, t_file *new);
+void		lstclear_t_file(t_file **lst, void (*del)(t_file *));
+t_file		*find_infile2(char *r_line);
+t_file		*find_outfile2(char *r_line);
+
 #endif
