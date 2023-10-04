@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 14:28:01 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/04 21:46:54 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/04 22:38:40 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,15 @@ static char	*find_file_name(char *token, t_file *infile, char *redi)
 	return (free(line_to_free), line_to_send);
 }
 
+static void	set_infile(t_file *infile, char *token, char *redi)
+{
+	infile->filename = token;
+	if (infile->type != HEREDOC && redi[0] == '<')
+		infile->type = INFILE;
+	if (infile->type != APPEND && redi[0] == '>')
+		infile->type = OUTFILE;
+}
+
 t_file	*find_file(char *r_line, char *redi)
 {
 	char		*token;
@@ -58,11 +67,7 @@ t_file	*find_file(char *r_line, char *redi)
 		token = find_file_name(token, infile, redi);
 		if (!token)
 			return (perror("parsing: infile"), free(infile), NULL);
-		infile->filename = token;
-		if (infile->type != HEREDOC && redi[0] == '<')
-			infile->type = INFILE;
-		if (infile->type != APPEND && redi[0] == '>')
-			infile->type = OUTFILE;
+		set_infile(infile, token, redi);
 		token = get_token_file(NULL, redi);
 		if (token && !ft_strncmp("<", redi, 1))
 			token += !(infile->type != HEREDOC);
