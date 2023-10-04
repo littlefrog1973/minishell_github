@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 16:01:30 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/03 22:19:34 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/04 11:40:58 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ t_file	*find_infile2(char *r_line)
 			infile->type = HEREDOC;
 			token++;
 		}
-		while (!ft_isalnum(*token))
+//		while (!ft_isalnum(*token))
+		while (ft_isspace(*token) && *token)
 			token++;
 		i = -1;
 		while (token[++i])
@@ -86,7 +87,8 @@ t_file	*find_outfile2(char *r_line)
 			infile->type = APPEND;
 			token++;
 		}
-		while (!ft_isalnum(*token))
+		while (ft_isspace(*token) && *token)
+//		while (!ft_isalnum(*token))
 			token++;
 		i = -1;
 		while (token[++i])
@@ -102,8 +104,8 @@ t_file	*find_outfile2(char *r_line)
 		if (infile->type != APPEND)
 			infile->type = OUTFILE;
 		token = get_token_file(NULL, ">");
-		if (token)
-			 token += !(infile->type != APPEND);
+//		if (token)
+//			 token += !(infile->type != APPEND);
 	}
 	return (head);
 }
@@ -124,7 +126,7 @@ void	lstadd_back_t_file(t_file **lst, t_file *new)
 		running->next = new;
 	}
 }
-void	lstclear_t_file(t_file **lst, void (*del)(t_file *))
+void	lstclear_t_file(t_file **lst, void (*del)(void *))
 {
 	t_file	*tmp;
 	t_file	*to_delete;
@@ -132,12 +134,12 @@ void	lstclear_t_file(t_file **lst, void (*del)(t_file *))
 	tmp = *lst;
 	while (tmp->next != NULL)
 	{
-		del(tmp);
 		to_delete = tmp;
-		tmp = tmp->next;
+		del(tmp->filename);
+		tmp = to_delete->next;
 		free(to_delete);
 	}
-	del(tmp);
+	del(tmp->filename);
 	free(tmp);
 	*lst = NULL;
 }

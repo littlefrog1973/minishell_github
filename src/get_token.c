@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:10:59 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/03 20:38:21 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/04 09:00:36 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,9 @@ char	*get_token_file(char *line, char *delimit)
 			(pointer++, offset++);
 			while (ft_isspace(*pointer) && *pointer)
 				(pointer++, offset++);
-			i = -1;
-			while (!ft_isspace(pointer[++i]) && *pointer);
+			i = 0;
+			while (!ft_isspace(pointer[i]) && pointer[i])
+				i++;
 		}
 		token = ft_substr(pointer - offset, 0, i + offset);
 		if (!token)

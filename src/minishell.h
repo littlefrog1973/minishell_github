@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/03 08:43:34 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/04 11:40:54 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,11 @@ void		lstclear_r_line(t_readline **lst, void (*del)(t_readline *));
 /*parsing_util3.c*/
 void		free_t_file(t_file *p_file);
 void		lstadd_back_t_file(t_file **lst, t_file *new);
-void		lstclear_t_file(t_file **lst, void (*del)(t_file *));
+void		lstclear_t_file(t_file **lst, void (*del)(void *));
 t_file		*find_infile2(char *r_line);
 t_file		*find_outfile2(char *r_line);
+
+/*parsing_util4.c*/
+char	*del_in_out2(char *cmd, t_file *infile, t_file *outfile);
 
 #endif

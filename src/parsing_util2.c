@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 14:54:19 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/02 15:51:16 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/04 12:15:17 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 void	free_t_readline(t_readline *tp_line)
 {
+	t_file	*current;
+	t_file	*running;
+
 	if (!tp_line)
 		return ;
 	else
@@ -24,15 +27,33 @@ void	free_t_readline(t_readline *tp_line)
 			free(tp_line->command);
 		if (tp_line->infile)
 		{
-			if (tp_line->infile->filename)
+			running = tp_line->infile;
+			while (running)
+			{
+				current = running;
+				free(current->filename);
+				running = current->next;
+				free(current);
+			}
+/*			if (tp_line->infile->filename)
 				free(tp_line->infile->filename);
 			free(tp_line->infile);
+*/
 		}
 		if (tp_line->outfile)
 		{
-			if (tp_line->outfile->filename)
+			running = tp_line->outfile;
+			while (running)
+			{
+				current = running;
+				free(current->filename);
+				running = current->next;
+				free(current);
+			}
+/*			if (tp_line->outfile->filename)
 				free(tp_line->outfile->filename);
 			free(tp_line->outfile);
+*/
 		}
 //		free(tp_line);
 	}
@@ -103,9 +124,10 @@ void	lstclear_r_line(t_readline **lst, void (*del)(t_readline *))
 	tmp = *lst;
 	while (tmp->next != NULL)
 	{
-		del(tmp);
 		to_delete = tmp;
-		tmp = tmp->next;
+		del(tmp);
+//		tmp = tmp->next;
+		tmp = to_delete->next;
 		free(to_delete);
 	}
 	del(tmp);
