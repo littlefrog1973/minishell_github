@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 12:37:46 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/04 10:08:06 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/04 13:00:30 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,13 @@ char	*put_env(char *command, char **env)
 			}
 			else if (command[i] == '$' && ft_isdigit(command[i + 1]))
 				i += 2;
+			else if (command[i] == '$' && command[i + 1] == '?')
+			{
+				buf[j] = command[i];
+				i++;
+				j++;
+				continue;
+			}
 			else if (command[i] == '$' && ft_isalpha(command[i + 1]))
 			{
 				k = word_len(&command[i + 1]);
