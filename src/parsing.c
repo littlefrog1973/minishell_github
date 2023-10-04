@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 12:37:46 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/04 13:00:30 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/04 17:08:19 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,8 +224,10 @@ t_readline	*parsing_line(char *read_line, char **env)
 			return (free(r_line), free_duo_ptr(to_free), lstclear_r_line(&head, free_t_readline), NULL);
 		lstadd_back_r_line(&head, p_line);
 		p_line->n_pipe = count_pipe(r_line);
-		p_line->infile = find_infile2(*temp);
-		p_line->outfile = find_outfile2(*temp);
+		p_line->infile = find_file(*temp, "<");
+		p_line->outfile = find_file(*temp, ">");
+//		p_line->infile = find_infile2(*temp);
+//		p_line->outfile = find_outfile2(*temp);
 		p_line->r_line = ft_strdup(*temp);
 		p_line->command = del_in_out2(*temp, p_line->infile, p_line->outfile);
 		if (!p_line->command)
