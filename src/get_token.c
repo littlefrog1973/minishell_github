@@ -6,11 +6,37 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:10:59 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/03 20:38:21 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/04 13:49:44 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static char	*find_word(char **line, char delimit)
+{
+	ssize_t	i;
+	size_t	offset;
+
+	offset = 0;
+	*line = ft_strchr(*line, delimit) + 1;
+	if (**line != delimit)
+		while (ft_isspace(**line) && **line)
+			(*line)++;
+	else
+	{
+		(*line)++;
+		offset++;
+		while (ft_isspace(**line) && **line)
+		{
+			(*line)++;
+			offset++;
+		}
+	}
+	i = 0;
+	while (!ft_isspace((*line)[i]) && (*line)[i])
+		i++;
+	return (ft_substr(*line - offset, 0, i + offset));
+}
 
 char	*get_token(char *line, char *delimit)
 {
@@ -21,10 +47,11 @@ char	*get_token(char *line, char *delimit)
 		pointer = line;
 	if (ft_strchr(pointer, delimit[0]))
 	{
-		token = ft_substr(pointer, 0, (size_t) (ft_strchr(pointer, delimit[0]) - pointer));
+		token = ft_substr(pointer, 0, (size_t)(ft_strchr(pointer, delimit[0])
+					- pointer));
 		if (!token)
 			return (perror("get_token"), NULL);
-		pointer += (size_t) (ft_strchr(pointer, ':') - pointer) + 1;
+		pointer += (size_t)(ft_strchr(pointer, ':') - pointer) + 1;
 		return (token);
 	}
 	else if (*pointer)
@@ -42,38 +69,16 @@ char	*get_token_file(char *line, char *delimit)
 {
 	static char	*pointer;
 	char		*token;
-	ssize_t		i;
-	size_t		offset;
 
-	offset = 0;
 	if (line != NULL)
 		pointer = line;
 	if (pointer == NULL)
 		return (NULL);
 	if (ft_strchr(pointer, delimit[0]))
 	{
-		pointer = ft_strchr(pointer, delimit[0]) + 1;
-		if (*pointer != delimit[0])
-		{
-			while (ft_isspace(*pointer) && *pointer)
-			{
-				pointer++;
-			}
-			i = -1;
-			while (!ft_isspace(pointer[++i]) && *pointer);
-//				i++;
-		}
-		else
-		{
-			(pointer++, offset++);
-			while (ft_isspace(*pointer) && *pointer)
-				(pointer++, offset++);
-			i = -1;
-			while (!ft_isspace(pointer[++i]) && *pointer);
-		}
-		token = ft_substr(pointer - offset, 0, i + offset);
+		token = find_word(&pointer, delimit[0]);
 		if (!token)
-			return(perror("get_token"), NULL);
+			return (perror("get_token"), NULL);
 		pointer = ft_strchr(pointer, delimit[0]);
 		return (token);
 	}

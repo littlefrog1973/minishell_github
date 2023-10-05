@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/03 08:43:34 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/04 20:59:24 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct s_file
 	struct s_file	*next;
 }	t_file;
 
-typedef	struct s_readline
+typedef struct s_readline
 {
 	char				*r_line;
 	char				*command;
@@ -55,43 +55,40 @@ typedef	struct s_readline
 	struct s_readline	*next;
 }	t_readline;
 
-
-
-
 /*readline.c*/
-char	*readline_wrap(const char *prompt);
+char		*readline_wrap(const char *prompt);
 
 /*get_token.c*/
-char	*get_token(char *line, char *delimit);
-char	*get_token_file(char *line, char *delimit);
+char		*get_token(char *line, char *delimit);
+char		*get_token_file(char *line, char *delimit);
 
 /*utils.c*/
-void	perr(char *s);
-ssize_t	search_str(char *str[], char *search);
-size_t	count_str(char *str[]);
-void	free_duo_ptr(char **argc);
-ssize_t	new_str(char **env, char *add_line);
+void		perr(char *s);
+ssize_t		search_str(char *str[], char *search);
+size_t		count_str(char *str[]);
+void		free_duo_ptr(char **argc);
+ssize_t		new_str(char **env, char *add_line);
 
 /*utils2.c*/
-char	**env_dup(char **env, char *add_line);
-void	init_fn_ptr(int (*fn_ptr[])(int, char **, char ***), char **list);
-int		count_char(char *r_line, char to_count);
+char		**env_dup(char **env, char *add_line);
+void		init_fn_ptr(int (*fn_ptr[])(int, char **, char ***), char **list);
+int			count_char(char *r_line, char to_count);
 
 /*cd.c*/
-int		cd(int argc, char **argv, char ***env);
+int			cd(int argc, char **argv, char ***env);
 
 /*export.c*/
-void	set_str(int arc, char *arv[], char *str);
-int		export(int argc, char **argv, char ***env);
+void		set_str(int arc, char *arv[], char *str);
+int			export(int argc, char **argv, char ***env);
 
 /*unset.c*/
-int		unset(int argc, char **argv, char ***env);
+int			unset(int argc, char **argv, char ***env);
 
 /*execute.c*/
-int	exec(char **argv, char ***envp, int i);
+int			exec(char **argv, char ***envp, int i);
 
 /*minishell.c*/
-int	get_fullpath(const char *line, char *full_path, char **env);
+int			get_fullpath(const char *line, char *full_path, char **env);
 
 /*parsing.c*/
 // trim white space from front and rear of read_line
@@ -114,8 +111,12 @@ void		lstclear_r_line(t_readline **lst, void (*del)(t_readline *));
 /*parsing_util3.c*/
 void		free_t_file(t_file *p_file);
 void		lstadd_back_t_file(t_file **lst, t_file *new);
-void		lstclear_t_file(t_file **lst, void (*del)(t_file *));
+void		lstclear_t_file(t_file **lst, void (*del)(void *));
 t_file		*find_infile2(char *r_line);
 t_file		*find_outfile2(char *r_line);
 
+/*parsing_util4.c*/
+char		*del_in_out2(char *cmd, t_file *infile, t_file *outfile);
+
+t_file		*find_file(char *r_line, char *redi);
 #endif

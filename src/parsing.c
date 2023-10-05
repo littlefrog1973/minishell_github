@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 12:37:46 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/03 21:19:46 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/04 17:08:19 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,13 @@ char	*put_env(char *command, char **env)
 			}
 			else if (command[i] == '$' && ft_isdigit(command[i + 1]))
 				i += 2;
+			else if (command[i] == '$' && command[i + 1] == '?')
+			{
+				buf[j] = command[i];
+				i++;
+				j++;
+				continue;
+			}
 			else if (command[i] == '$' && ft_isalpha(command[i + 1]))
 			{
 				k = word_len(&command[i + 1]);
@@ -195,6 +202,7 @@ t_readline	*parsing_line(char *read_line, char **env)
 {
 	t_readline	*p_line;
 	char		**temp;
+	char		**to_free;
 	char		*r_line;
 	t_readline	*head;
 
@@ -205,6 +213,7 @@ t_readline	*parsing_line(char *read_line, char **env)
 	if (!temp)
 		return (free(r_line), NULL);
 	temp = interpret(temp, env);
+	to_free = temp;
 	if (!temp)
 		return (free(r_line), NULL);
 	head = NULL;
@@ -212,16 +221,18 @@ t_readline	*parsing_line(char *read_line, char **env)
 	{
 		p_line = init_parse_line();
 		if (!p_line)
-			return (free(r_line), free_duo_ptr(temp), lstclear_r_line(&head, free_t_readline), NULL);
+			return (free(r_line), free_duo_ptr(to_free), lstclear_r_line(&head, free_t_readline), NULL);
 		lstadd_back_r_line(&head, p_line);
 		p_line->n_pipe = count_pipe(r_line);
-		p_line->infile = find_infile2(*temp);
-		p_line->outfile = find_outfile2(*temp);
-		p_line->r_line = *temp;
-		p_line->command = del_in_out(*temp, p_line->infile, p_line->outfile);
+		p_line->infile = find_file(*temp, "<");
+		p_line->outfile = find_file(*temp, ">");
+//		p_line->infile = find_infile2(*temp);
+//		p_line->outfile = find_outfile2(*temp);
+		p_line->r_line = ft_strdup(*temp);
+		p_line->command = del_in_out2(*temp, p_line->infile, p_line->outfile);
 		if (!p_line->command)
-			return (free(r_line), free_duo_ptr(temp), lstclear_r_line(&head, free_t_readline), NULL);
+			return (free(r_line), free_duo_ptr(to_free), lstclear_r_line(&head, free_t_readline), NULL);
 		temp++;
 	}
-	return (head);
+	return (free_duo_ptr(to_free), free(r_line), head);
 }

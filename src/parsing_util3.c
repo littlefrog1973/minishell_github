@@ -6,12 +6,11 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 16:01:30 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/03 22:19:34 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/04 14:37:34 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 t_file	*find_infile2(char *r_line)
 // to find infile name and put in linked list infile
@@ -29,7 +28,7 @@ t_file	*find_infile2(char *r_line)
 	while (token)
 	{
 		line_to_free = token;
-		infile	= (t_file*) ft_calloc(1, sizeof(t_file));
+		infile = (t_file *) ft_calloc(1, sizeof(t_file));
 		if (!infile || !r_line)
 			return (perror("minishell: parsing: infile"), NULL);
 		lstadd_back_t_file(&head, infile);
@@ -38,28 +37,26 @@ t_file	*find_infile2(char *r_line)
 			infile->type = HEREDOC;
 			token++;
 		}
-		while (!ft_isalnum(*token))
+		while (ft_isspace(*token) && *token)
 			token++;
 		i = -1;
 		while (token[++i])
-		{
 			if (ft_isspace(token[i]))
 				break ;
-		}
 		token = ft_substr(token, 0, i);
 		if (!token)
-			return(perror("parsing: infile"), free(line_to_free), free(infile), NULL);
+			return (perror("parsing: infile"), free(line_to_free), free(infile)
+				, NULL);
 		free(line_to_free);
 		infile->filename = token;
 		if (infile->type != HEREDOC)
 			infile->type = INFILE;
 		token = get_token_file(NULL, "<");
 		if (token)
-			 token += !(infile->type != HEREDOC);
+			token += !(infile->type != HEREDOC);
 	}
 	return (head);
 }
-
 
 t_file	*find_outfile2(char *r_line)
 // to find outfile name and put in linked list outfile
@@ -77,7 +74,7 @@ t_file	*find_outfile2(char *r_line)
 	while (token)
 	{
 		line_to_free = token;
-		infile	= (t_file*) ft_calloc(1, sizeof(t_file));
+		infile = (t_file *) ft_calloc(1, sizeof(t_file));
 		if (!infile || !r_line)
 			return (perror("minishell: parsing: outfile"), NULL);
 		lstadd_back_t_file(&head, infile);
@@ -86,24 +83,21 @@ t_file	*find_outfile2(char *r_line)
 			infile->type = APPEND;
 			token++;
 		}
-		while (!ft_isalnum(*token))
+		while (ft_isspace(*token) && *token)
 			token++;
 		i = -1;
 		while (token[++i])
-		{
 			if (ft_isspace(token[i]))
 				break ;
-		}
 		token = ft_substr(token, 0, i);
 		if (!token)
-			return(perror("parsing: outfile"), free(line_to_free), free(infile), NULL);
+			return (perror("parsing: outfile"), free(line_to_free),
+				free(infile), NULL);
 		free(line_to_free);
 		infile->filename = token;
 		if (infile->type != APPEND)
 			infile->type = OUTFILE;
 		token = get_token_file(NULL, ">");
-		if (token)
-			 token += !(infile->type != APPEND);
 	}
 	return (head);
 }
@@ -124,7 +118,8 @@ void	lstadd_back_t_file(t_file **lst, t_file *new)
 		running->next = new;
 	}
 }
-void	lstclear_t_file(t_file **lst, void (*del)(t_file *))
+
+void	lstclear_t_file(t_file **lst, void (*del)(void *))
 {
 	t_file	*tmp;
 	t_file	*to_delete;
@@ -132,24 +127,27 @@ void	lstclear_t_file(t_file **lst, void (*del)(t_file *))
 	tmp = *lst;
 	while (tmp->next != NULL)
 	{
-		del(tmp);
 		to_delete = tmp;
-		tmp = tmp->next;
+		del(tmp->filename);
+		tmp = to_delete->next;
 		free(to_delete);
 	}
-	del(tmp);
+	del(tmp->filename);
 	free(tmp);
 	*lst = NULL;
 }
 
 void	free_t_file(t_file *p_file)
 {
-	if (!p_file)
-		return ;
-	else
+	t_file	*running;
+	t_file	*current;
+
+	running = p_file;
+	while (running)
 	{
-		if (p_file->filename)
-			free(p_file->filename);
-		free(p_file);
+		current = running;
+		free(current->filename);
+		running = current->next;
+		free(current);
 	}
 }
