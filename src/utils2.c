@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 22:45:00 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/29 14:36:32 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/05 08:40:15 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,4 +109,10 @@ int	count_char(char *r_line, char to_count)
 			n_char++;
 	}
 	return (n_char);
+}
+
+void	free_ptr(char *argc)
+{
+	if (argc)
+		free(argc);
 }

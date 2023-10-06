@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/27 12:37:46 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/04 17:08:19 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/04 23:11:52 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	*put_env(char *command, char **env)
 			buf[j] = command[i];
 			i++;
 			j++;
-			continue;
+			continue ;
 		}
 		if (d_quote || !s_quote)
 		{
@@ -61,7 +61,7 @@ char	*put_env(char *command, char **env)
 				buf[j] = command[i];
 				i++;
 				j++;
-				continue;
+				continue ;
 			}
 			else if (command[i] == '$' && ft_isdigit(command[i + 1]))
 				i += 2;
@@ -70,7 +70,7 @@ char	*put_env(char *command, char **env)
 				buf[j] = command[i];
 				i++;
 				j++;
-				continue;
+				continue ;
 			}
 			else if (command[i] == '$' && ft_isalpha(command[i + 1]))
 			{
@@ -78,7 +78,9 @@ char	*put_env(char *command, char **env)
 				ft_strlcpy(buf2, &command[i + 1], k + 1);
 				ft_strlcat(buf2, "=", k + 2);
 				if (search_str(env, buf2) >= 0)
-					j += ft_strlcpy(&buf[j], &env[search_str(env, buf2)][ft_strlen(buf2)], ft_strlen(&env[search_str(env, buf2)][ft_strlen(buf2)]) + 1);
+					j += ft_strlcpy(&buf[j], &env[search_str(env, buf2)]
+						[ft_strlen(buf2)], ft_strlen(&env[search_str(env, buf2)]
+							[ft_strlen(buf2)]) + 1);
 				i += k + 1;
 			}
 		}
@@ -221,17 +223,17 @@ t_readline	*parsing_line(char *read_line, char **env)
 	{
 		p_line = init_parse_line();
 		if (!p_line)
-			return (free(r_line), free_duo_ptr(to_free), lstclear_r_line(&head, free_t_readline), NULL);
+			return (free(r_line), free_duo_ptr(to_free), lstclear_r_line(&head,
+					free_t_readline), NULL);
 		lstadd_back_r_line(&head, p_line);
 		p_line->n_pipe = count_pipe(r_line);
 		p_line->infile = find_file(*temp, "<");
 		p_line->outfile = find_file(*temp, ">");
-//		p_line->infile = find_infile2(*temp);
-//		p_line->outfile = find_outfile2(*temp);
 		p_line->r_line = ft_strdup(*temp);
 		p_line->command = del_in_out2(*temp, p_line->infile, p_line->outfile);
 		if (!p_line->command)
-			return (free(r_line), free_duo_ptr(to_free), lstclear_r_line(&head, free_t_readline), NULL);
+			return (free(r_line), free_duo_ptr(to_free), lstclear_r_line(&head,
+					free_t_readline), NULL);
 		temp++;
 	}
 	return (free_duo_ptr(to_free), free(r_line), head);

@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/04 20:59:24 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/06 08:20:51 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ ssize_t		new_str(char **env, char *add_line);
 char		**env_dup(char **env, char *add_line);
 void		init_fn_ptr(int (*fn_ptr[])(int, char **, char ***), char **list);
 int			count_char(char *r_line, char to_count);
+void		free_ptr(char *argc);
 
 /*cd.c*/
 int			cd(int argc, char **argv, char ***env);
@@ -117,6 +118,8 @@ t_file		*find_outfile2(char *r_line);
 
 /*parsing_util4.c*/
 char		*del_in_out2(char *cmd, t_file *infile, t_file *outfile);
-
 t_file		*find_file(char *r_line, char *redi);
+
+/*parsing_util5.c*/
+char		*put_env(char *command, char **env);
 #endif
