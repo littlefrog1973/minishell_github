@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
+/*   By: pboonpro <pboonpro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/04 20:59:24 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/07 12:45:17 by pboonpro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,4 +119,5 @@ t_file		*find_outfile2(char *r_line);
 char		*del_in_out2(char *cmd, t_file *infile, t_file *outfile);
 
 t_file		*find_file(char *r_line, char *redi);
+void	print_table(t_readline *a);
 #endif

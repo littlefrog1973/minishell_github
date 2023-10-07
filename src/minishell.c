@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
+/*   By: pboonpro <pboonpro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/04 22:17:05 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/07 13:34:27 by pboonpro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,19 @@ int	main(int argc, char *argv[], char *environ[])
 	while (1)
 	{
 		read_line = readline(PROMPT);
+		// if (!read_line)
+		// 	break;
 		add_history(read_line);
 		p_line = parsing_line(read_line, new_env);
 		if (!p_line)
-			return(free_duo_ptr(new_env), free(read_line), perror("minishell: main"), 1);
+			continue ;
+			//return(free_duo_ptr(new_env), free(read_line), perror("minishell: main"), 1);
+		print_table(p_line);
 		if (!read_line || !ft_strncmp(read_line, "exit", sizeof("exit") - 1))
 		{
 			if (!read_line)
 			{
+			// printf("hello exit\n");
 				printf("exit\n");
 				free_duo_ptr(new_env);
 				lstclear_r_line(&p_line, free_t_readline);
@@ -95,5 +100,6 @@ int	main(int argc, char *argv[], char *environ[])
 		free(read_line);
 		lstclear_r_line(&p_line, free_t_readline);
 	}
+	printf("exit\n");
 	return (status);
 }
