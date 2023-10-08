@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 23:00:19 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/08 07:28:44 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/08 18:30:05 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static void	set_lst_file(char *cmd, t_file *infile, char arrow)
 	{
 		i = ft_strchr(cmd, arrow) - cmd;
 		cmd[i] = ' ';
+		if (cmd[i + 1] == arrow)
+			cmd[i + 1] = ' ';
 		ft_memset(ft_strnstr(&cmd[i], infile->filename, ft_strlen(&cmd[i])),
 			' ', ft_strlen(infile->filename));
 		if (infile->next == NULL)
