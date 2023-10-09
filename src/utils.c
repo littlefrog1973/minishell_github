@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 15:31:13 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/19 23:04:43 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/09 23:59:12 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ void	free_duo_ptr(char **argc)
 {
 	int	i;
 
+	if (!argc)
+		return ;
 	i = -1;
 	while (argc[++i])
 		free(argc[i]);

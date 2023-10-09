@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/06 08:33:48 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/10 00:02:17 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,12 @@ int	main(int argc, char *argv[], char *environ[])
 		add_history(read_line);
 		p_line = parsing_line(read_line, new_env);
 		if (!p_line)
-			return (free_duo_ptr(new_env), free(read_line),
-				perror("minishell: main"), 1);
+		{
+			free_ptr(read_line);
+			continue ;
+		}
+//			return (free_duo_ptr(new_env), free(read_line),
+//				perror("minishell: main"), 1);
 		if (!read_line || !ft_strncmp(read_line, "exit", sizeof("exit") - 1))
 		{
 			if (!read_line)
