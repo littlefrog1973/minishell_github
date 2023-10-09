@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 14:28:01 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/10 00:26:38 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/10 00:35:10 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,6 @@ t_file	*find_file(char *r_line, char *redi)
 			return (perror("parsing: infile"), free(infile), NULL);
 		set_infile(infile, token, redi);
 		token = get_token_file(NULL, redi);
-//		if (token && !ft_strncmp("<", redi, 1))
-//			token += !(infile->type != HEREDOC);
 	}
 	return (head);
 }
