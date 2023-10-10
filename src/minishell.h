@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/06 08:20:51 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/10 08:44:01 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,16 +109,15 @@ char		*del_in_out(char *command, t_file *infile, t_file *outfile);
 void		lstadd_back_r_line(t_readline **lst, t_readline *new);
 void		lstclear_r_line(t_readline **lst, void (*del)(t_readline *));
 
-/*parsing_util3.c*/
-void		free_t_file(t_file *p_file);
-void		lstadd_back_t_file(t_file **lst, t_file *new);
-void		lstclear_t_file(t_file **lst, void (*del)(void *));
-t_file		*find_infile2(char *r_line);
-t_file		*find_outfile2(char *r_line);
+/*parsing_util3_1.c*/
+t_file		*find_file(char *r_line, char *redi);
 
 /*parsing_util4.c*/
 char		*del_in_out2(char *cmd, t_file *infile, t_file *outfile);
-t_file		*find_file(char *r_line, char *redi);
+void		lstclear_t_file(t_file **lst, void (*del)(void *));
+void		free_t_file(t_file *p_file);
+void		lstadd_back_t_file(t_file **lst, t_file *new);
+
 
 /*parsing_util5.c*/
 char		*put_env(char *command, char **env);
