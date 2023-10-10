@@ -6,13 +6,13 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 23:15:34 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/06 08:34:24 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/10 16:20:48 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**interpret(char **command, char **env)
+static char	**interpret(char **command, char **env)
 {
 	char	*temp;
 	int		i;
@@ -44,6 +44,7 @@ static char	**set_r_line_temp(char *read_line, char **r_line, char **env)
 	if (!(*r_line))
 		return ((char **) NULL);
 	temp1 = ft_split(*r_line, '|');
+	temp1 = check_pipe_in_quote(temp1, *r_line);
 	if (!temp1)
 		return (free(*r_line), (char **) NULL);
 	temp2 = interpret(temp1, env);
@@ -72,6 +73,8 @@ t_readline	*parsing_line(char *read_line, char **env)
 	char		*r_line;
 	t_readline	*head;
 
+	if (!(*read_line))
+		return (NULL);
 	temp = set_r_line_temp(read_line, &r_line, env);
 	if (!temp)
 		return (free_ptr(r_line), NULL);
