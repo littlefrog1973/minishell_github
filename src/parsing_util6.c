@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 12:53:56 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/11 09:46:56 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/11 10:50:49 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,12 @@ static char	*rejoin_str(char **temp1, size_t l)
 	to_free = temp1[l];
 	ft_strlcpy(buf, temp1[l], ft_strlen(temp1[l]) + 1);
 	ft_strlcat(buf, "|", ft_strlen(buf) + 2);
-	ft_strlcat(buf, temp1[l + 1], ft_strlen(buf) + ft_strlen(temp1[l + 1]) + 1);
+	if (temp1[l + 1])
+		ft_strlcat(buf, temp1[l + 1], ft_strlen(buf) + ft_strlen(temp1[l + 1])
+			+ 1);
 	temp1[l] = ft_strdup(buf);
 	if (!temp1[l])
-		return (perror("parsing"), NULL);
+		return (perror("parsing: rejoin_str"), NULL);
 	free(to_free);
 	return (temp1[l]);
 }
@@ -76,21 +78,22 @@ char	**check_pipe_in_quote(char **temp1, char *r_line)
 
 	rr_line = put_pipe(r_line);
 	if (!rr_line)
-		return (perror("parsing"), NULL);
+		return (perror("parsing"), temp1);
 	i = count_char(rr_line, '|');
 	if (!i)
-		return (temp1);
+		return (free(rr_line), temp1);
 	while (i > 0)
 	{
 		l = seek_str_with_pipe(temp1, rr_line);
 		temp1[l] = rejoin_str(temp1, l);
 		if (!temp1[l])
-			return (perror("parsing"), free_duo_ptr(temp1), NULL);
-		free(temp1[l + 1]);
+			return (perror("parsing"), free(rr_line), free_duo_ptr(temp1),
+				NULL);
+		free_ptr(temp1[l + 1]);
 		ft_memmove(&temp1[l + 1], &temp1[l + 2], count_str(&temp1[l + 2])
 			* sizeof(char *));
 		ft_memset(&temp1[l + 1 + count_str(&temp1[l + 2])], 0, sizeof(char *));
 		--i;
 	}
-	return (temp1);
+	return (free(rr_line), temp1);
 }

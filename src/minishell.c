@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/10 16:11:08 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/11 11:06:44 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ int	main(int argc, char *argv[], char *environ[])
 	while (1)
 	{
 		read_line = readline(PROMPT);
+		if (!read_line)
+			exit (0);
 		add_history(read_line);
 		p_line = parsing_line(read_line, new_env);
 		if (!p_line)
