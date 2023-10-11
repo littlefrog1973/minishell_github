@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pboonpro <pboonpro@student.42.fr>          +#+  +:+       +#+         #
+#    By: pboonpro <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/17 13:45:55 by sdeeyien          #+#    #+#              #
-#    Updated: 2023/10/07 12:45:28 by pboonpro         ###   ########.fr        #
+#    Updated: 2023/10/09 23:12:48 by pboonpro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,10 +29,12 @@ DEPS = minishell.h
 
 SRC = minishell.c get_token.c cd.c utils.c utils2.c export.c unset.c execute.c \
 		parsing.c parsing_util.c parsing_util2.c parsing_util3.c parsing_util4.c \
-		parsing_util3_1.c debug.c
+		parsing_util3_1.c debug.c \
+		parsing_util.c parsing_util2.c parsing_util3.c parsing_util4.c \
+		parsing_util3_1.c parsing_1.c parsing_util5.c
 #SRC = get_token.c try_getpath.c
 #SRC = read_line_with_history.c
-BONUS =
+#BONUS =
 
 OBJ := $(patsubst %.c, $(OBJDIR)%.o, $(SRC))
 BONUS_OBJ := $(patsubst %.c, $(OBJDIR)%.o, $(BONUS))
@@ -41,7 +43,7 @@ BONUS := $(addprefix $(SRCDIR), $(BONUS))
 DEPS := $(addprefix $(SRCDIR), $(DEPS))
 
 NAME = minishell
-BONUS_NAME =
+#BONUS_NAME =
 
 all : $(NAME) $(BONUS_NAME)
 

@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pboonpro <pboonpro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pboonpro <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/07 12:45:17 by pboonpro         ###   ########.fr       */
+/*   Updated: 2023/10/08 22:41:36 by pboonpro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -73,6 +74,7 @@ ssize_t		new_str(char **env, char *add_line);
 char		**env_dup(char **env, char *add_line);
 void		init_fn_ptr(int (*fn_ptr[])(int, char **, char ***), char **list);
 int			count_char(char *r_line, char to_count);
+void		free_ptr(char *argc);
 
 /*cd.c*/
 int			cd(int argc, char **argv, char ***env);
@@ -117,7 +119,9 @@ t_file		*find_outfile2(char *r_line);
 
 /*parsing_util4.c*/
 char		*del_in_out2(char *cmd, t_file *infile, t_file *outfile);
-
 t_file		*find_file(char *r_line, char *redi);
 void	print_table(t_readline *a);
+
+/*parsing_util5.c*/
+char		*put_env(char *command, char **env);
 #endif
