@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/11 15:11:02 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/11 16:13:35 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,5 +134,8 @@ int			pwd(int argc, char **argv, char ***env);
 
 /*env.c*/
 int			env(int argc, char **argv, char ***envv);
+
+/*exec_single_buitlin.c*/
+int			exec_single_builtin(char **argv, char ***env);
 
 #endif

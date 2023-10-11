@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 22:45:00 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/11 14:09:02 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/11 16:13:55 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ void	init_fn_ptr(int (*fn_ptr[])(int, char **, char ***), char **list)
 	list[4] = "pwd\n";
 	list[5] = "env\n";
 	list[6] = NULL;
-
 }
 
 /*

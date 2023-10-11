@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/11 15:56:33 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/11 16:05:51 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,21 +52,7 @@ void	void_arg(int *argc, char **argv)
 	(void) argc;
 	(void) argv;
 }
-int	exec_single_builtin(char **argv, char ***env)
-{
-	int		status;
-	int		(*fn_ptr[NUM_BUILTIN + 1])(int, char **, char ***);
-	char	*fn_list[NUM_BUILTIN + 1];
 
-	if (!argv || !env)
-		return (1);
-	init_fn_ptr(fn_ptr, fn_list);
-	if (search_str(fn_list, argv[0]) >= 0)
-		status = fn_ptr[search_str(fn_list, argv[0])]((int) count_str(argv), argv, env);
-	else
-		status = 1;
-	return (status);
-}
 int	main(int argc, char *argv[], char *environ[])
 {
 	char		*read_line;
