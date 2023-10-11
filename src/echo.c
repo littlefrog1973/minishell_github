@@ -12,38 +12,29 @@
 
 #include "minishell.h"
 
-int	argv_count(char **av)
+int	echo(int argc, char **argv, char ***env)
 {
-	int	i;
-
-	i = 0;
-	while (av[i])
-		i++;
-	return (i);
-}
-
-void	echo_fun(char **argv)
-{
-	int	i;
-	int	new_line;
-	int	count;
+	int		i;
+	int		new_line;
+	char	*to_free;
 
 	new_line = 1;
 	i = 1;
-	count = argv_count(argv);
-	if (str[i] && ft_strnstr(argv[i], "-n", 2))
+	if (argv[i] && ft_strnstr(argv[i], "-n", 2))
 	{
 		i++;
 		new_line = 0;
 	}
 	while (argv[i])
 	{
-		printf("%s", argv[i]);
-		if (i != count - 1)
+		to_free = put_env(argv[i], *env);
+		printf("%s", to_free);
+		if (i != argc - 1)
 			printf(" ");
+		free(to_free);
 		i++;
 	}
-	if (!argv[i] && !new_line)
+	if (!argv[i] && new_line)
 		printf("\n");
 	return (EXIT_SUCCESS);
 }

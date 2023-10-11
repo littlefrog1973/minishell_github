@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/11 14:29:20 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/11 15:11:02 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,4 +125,14 @@ char		*put_env(char *command, char **env);
 /*parsing_util6.c*/
 int			count_pipe_in_quote(char *r_line);
 char		**check_pipe_in_quote(char **temp1, char *r_line);
+
+/*echo.c*/
+int			echo(int argc, char **argv, char ***env);
+
+/*pwd.c*/
+int			pwd(int argc, char **argv, char ***env);
+
+/*env.c*/
+int			env(int argc, char **argv, char ***envv);
+
 #endif

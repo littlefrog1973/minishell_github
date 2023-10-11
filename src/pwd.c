@@ -12,10 +12,14 @@
 
 #include "minishell.h"
 
-void	pwd(void)
+//void	pwd(void)
+int	pwd(int argc, char **argv, char ***env)
 {
 	char	*name;
 
+	(void) argc;
+	(void) argv;
+	(void) env;
 	name = NULL;
 	name = getcwd(name, 0);
 	if (!name)
@@ -24,6 +28,6 @@ void	pwd(void)
 		return (EXIT_FAILURE);
 	}
 	printf("%s\n", name);
-	free(cwd);
+	free(name);
 	return (EXIT_SUCCESS);
 }
