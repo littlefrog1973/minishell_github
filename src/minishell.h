@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/10 12:58:38 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/11 09:36:40 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ void		lstadd_back_t_file(t_file **lst, t_file *new);
 
 
 /*parsing_util5.c*/
+void		set_ds_quote(int *s_quote, int *d_quote, char cmd);
 char		*put_env(char *command, char **env);
 
 /*parsing_util6.c*/
