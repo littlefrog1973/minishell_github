@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 23:15:34 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/11 11:04:33 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/11 14:02:56 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,11 @@ static char	**set_r_line_temp(char *read_line, char **r_line, char **env)
 	char	**temp1;
 	char	**temp2;
 
+	if (!read_line || !(*read_line))
+		return ((char **) NULL);
 	*r_line = trim_line(read_line);
 	if (!(*r_line))
-		return ((char **) NULL);
+		return (perror("parsing"), (char **) NULL);
 	temp1 = ft_split(*r_line, '|');
 	temp1 = check_pipe_in_quote(temp1, *r_line);
 	if (!temp1)
@@ -56,8 +58,15 @@ static char	**set_r_line_temp(char *read_line, char **r_line, char **env)
 }
 
 static t_readline	*set_p_line(t_readline *p_line, char *temp, char *r_line)
+// set n_pipe = -1 in case of pipe in the first or in the last of r_line
 {
-	p_line->n_pipe = count_pipe(r_line);
+	int	nn_pipe;
+
+	if (count_pipe(r_line) >= 0)
+		nn_pipe = count_pipe(r_line) - count_pipe_in_quote(r_line);
+	else
+		nn_pipe = -1;
+	p_line->n_pipe = nn_pipe;
 	p_line->infile = find_file(temp, "<");
 	p_line->outfile = find_file(temp, ">");
 	p_line->r_line = ft_strdup(temp);
@@ -76,7 +85,7 @@ t_readline	*parsing_line(char *read_line, char **env)
 	if (!(*read_line))
 		return (NULL);
 	temp = set_r_line_temp(read_line, &r_line, env);
-	if (!temp)
+	if (!temp || !r_line)
 		return (free_ptr(r_line), NULL);
 	to_free = temp;
 	head = NULL;

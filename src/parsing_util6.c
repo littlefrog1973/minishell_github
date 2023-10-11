@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 12:53:56 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/11 10:50:49 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/11 13:53:12 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,26 @@ static char	*rejoin_str(char **temp1, size_t l)
 	return (temp1[l]);
 }
 
+int	count_pipe_in_quote(char *r_line)
+{
+	size_t	n_pipe;
+	size_t	i;
+	int		d_quote;
+	int		s_quote;
+
+	i = -1;
+	d_quote = 0;
+	s_quote = 0;
+	n_pipe = 0;
+	while (r_line[++i])
+	{
+		set_ds_quote(&s_quote, &d_quote, r_line[i]);
+		if ((s_quote || d_quote) && r_line[i] == '|')
+			n_pipe++;
+	}
+	return (n_pipe);
+}
+
 char	**check_pipe_in_quote(char **temp1, char *r_line)
 {
 	char	*rr_line;
@@ -79,7 +99,7 @@ char	**check_pipe_in_quote(char **temp1, char *r_line)
 	rr_line = put_pipe(r_line);
 	if (!rr_line)
 		return (perror("parsing"), temp1);
-	i = count_char(rr_line, '|');
+	i = (size_t) count_char(rr_line, '|');
 	if (!i)
 		return (free(rr_line), temp1);
 	while (i > 0)

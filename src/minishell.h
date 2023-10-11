@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/11 09:36:40 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/11 14:29:20 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 
 # define PROMPT "minishell$>"
 # define WHITE_SPACE "\n\r\f\v\t "
-# define NUM_BUILTIN 3
+# define NUM_BUILTIN 6
 
 # define NONE 0
 # define INFILE 1
@@ -118,11 +118,11 @@ void		lstclear_t_file(t_file **lst, void (*del)(void *));
 void		free_t_file(t_file *p_file);
 void		lstadd_back_t_file(t_file **lst, t_file *new);
 
-
 /*parsing_util5.c*/
 void		set_ds_quote(int *s_quote, int *d_quote, char cmd);
 char		*put_env(char *command, char **env);
 
 /*parsing_util6.c*/
+int			count_pipe_in_quote(char *r_line);
 char		**check_pipe_in_quote(char **temp1, char *r_line);
 #endif

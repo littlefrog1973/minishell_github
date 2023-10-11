@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 22:45:00 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/05 08:40:15 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/11 14:09:02 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,18 @@ void	init_fn_ptr(int (*fn_ptr[])(int, char **, char ***), char **list)
 	fn_ptr[0] = cd;
 	fn_ptr[1] = export;
 	fn_ptr[2] = unset;
-	fn_ptr[3] = NULL;
+	fn_ptr[3] = echo;
+	fn_ptr[4] = pwd;
+	fn_ptr[5] = env;
+	fn_ptr[6] = NULL;
 	list[0] = "cd\0";
 	list[1] = "export\0";
 	list[2] = "unset\0";
-	list[3] = NULL;
+	list[3] = "echo\n";
+	list[4] = "pwd\n";
+	list[5] = "env\n";
+	list[6] = NULL;
+
 }
 
 /*

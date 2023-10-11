@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/11 11:06:44 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/11 12:33:44 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int	main(int argc, char *argv[], char *environ[])
 			exit (0);
 		add_history(read_line);
 		p_line = parsing_line(read_line, new_env);
+//		printf("number of corrected pipe = %d\n", p_line->n_pipe);
 		if (!p_line)
 		{
 			free_ptr(read_line);
