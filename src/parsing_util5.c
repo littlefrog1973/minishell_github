@@ -6,14 +6,15 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 08:17:08 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/11 09:36:55 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/12 14:03:38 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	set_ds_quote(int *s_quote, int *d_quote, char cmd)
+static void	set_ds_quote_4args(int *s_quote, int *d_quote, char cmd, size_t *i)
 {
+	(*i)++;
 	if (cmd == '\'' && !(*d_quote))
 	{
 		if (!(*s_quote))
@@ -59,8 +60,10 @@ static size_t	dup_buf_env2(char *buf, char *command, size_t *i, char **env)
 {
 	size_t	j;
 
+	if (!command[*i])
+		return (0);
 	j = ft_strlen(buf);
-	if ((command[*i] != '$') || (command[*i] == '$' && command[*i + 1] == '?'))
+	if (command[*i] != '$')
 	{
 		dup_buf(buf, command, i, &j);
 		return (1);
@@ -78,31 +81,31 @@ static size_t	dup_buf_env2(char *buf, char *command, size_t *i, char **env)
 	return (0);
 }
 
-char	*put_env(char *command, char **env)
+char	*put_env(char *command, char **env, int status)
 {
-	size_t	i;
 	char	buf[BUFSIZ];
+	size_t	i;
 	size_t	j;
 	int		s_quote;
 	int		d_quote;
 
 	ft_memset(buf, 0, BUFSIZ);
-	i = 0;
-	j = 0;
-	s_quote = 0;
-	d_quote = 0;
+	init_put_env_var(&i, &j, &s_quote, &d_quote);
 	while (command[i])
 	{
 		if ((command[i] == '\'' && !d_quote) || (command[i] == '"' && !s_quote))
 		{
-			i++;
-			set_ds_quote(&s_quote, &d_quote, command[i]);
+			set_ds_quote_4args(&s_quote, &d_quote, command[i], &i);
 			continue ;
 		}
 		if (s_quote)
 			dup_buf(buf, command, &i, &j);
 		else if (d_quote || !s_quote)
+		{
+			if (command[i] == '$' && command[i + 1] == '?')
+				j += dup_buf_status(buf, j, status, &i);
 			j += dup_buf_env2(buf, command, &i, env);
+		}
 	}
 	return (ft_strdup(buf));
 }

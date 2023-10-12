@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/11 16:05:51 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/12 13:02:52 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	main(int argc, char *argv[], char *environ[])
 	int			status;
 	t_readline	*p_line;
 
-	status = 0;
+	status = 1234;
 	void_arg(&argc, argv);
 	signal(SIGINT, return_promt);
 	signal(SIGQUIT, return_promt);
@@ -74,7 +74,7 @@ int	main(int argc, char *argv[], char *environ[])
 		if (!read_line)
 			exit (0);
 		add_history(read_line);
-		p_line = parsing_line(read_line, new_env);
+		p_line = parsing_line(read_line, new_env, status);
 		if (!p_line)
 		{
 			free_ptr(read_line);
@@ -97,7 +97,7 @@ int	main(int argc, char *argv[], char *environ[])
 			exit (EXIT_SUCCESS);
 		}
 		else if (!p_line->n_pipe)
-			exec_single_builtin(ft_split(p_line->command, ' '), &new_env);
+			status = exec_single_builtin(ft_split(p_line->command, ' '), &new_env);
 		free(read_line);
 		lstclear_r_line(&p_line, free_t_readline);
 	}

@@ -27,7 +27,7 @@ int	echo(int argc, char **argv, char ***env)
 	}
 	while (argv[i])
 	{
-		to_free = put_env(argv[i], *env);
+		to_free = put_env(argv[i], *env, 0);
 		printf("%s", to_free);
 		if (i != argc - 1)
 			printf(" ");
