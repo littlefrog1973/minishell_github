@@ -6,15 +6,14 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 08:17:08 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/06 08:20:17 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/11 09:36:55 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	set_ds_quote(int *s_quote, int *d_quote, char cmd, size_t *i)
+void	set_ds_quote(int *s_quote, int *d_quote, char cmd)
 {
-	(*i)++;
 	if (cmd == '\'' && !(*d_quote))
 	{
 		if (!(*s_quote))
@@ -96,7 +95,8 @@ char	*put_env(char *command, char **env)
 	{
 		if ((command[i] == '\'' && !d_quote) || (command[i] == '"' && !s_quote))
 		{
-			set_ds_quote(&s_quote, &d_quote, command[i], &i);
+			i++;
+			set_ds_quote(&s_quote, &d_quote, command[i]);
 			continue ;
 		}
 		if (s_quote)

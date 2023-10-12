@@ -6,10 +6,9 @@
 /*   By: pboonpro <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/08 22:41:36 by pboonpro         ###   ########.fr       */
+/*   Updated: 2023/10/11 23:15:36 by pboonpro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -29,7 +28,7 @@
 
 # define PROMPT "minishell$>"
 # define WHITE_SPACE "\n\r\f\v\t "
-# define NUM_BUILTIN 3
+# define NUM_BUILTIN 6
 
 # define NONE 0
 # define INFILE 1
@@ -110,18 +109,33 @@ char		*del_in_out(char *command, t_file *infile, t_file *outfile);
 void		lstadd_back_r_line(t_readline **lst, t_readline *new);
 void		lstclear_r_line(t_readline **lst, void (*del)(t_readline *));
 
-/*parsing_util3.c*/
-void		free_t_file(t_file *p_file);
-void		lstadd_back_t_file(t_file **lst, t_file *new);
-void		lstclear_t_file(t_file **lst, void (*del)(void *));
-t_file		*find_infile2(char *r_line);
-t_file		*find_outfile2(char *r_line);
+/*parsing_util3_1.c*/
+t_file		*find_file(char *r_line, char *redi);
 
 /*parsing_util4.c*/
 char		*del_in_out2(char *cmd, t_file *infile, t_file *outfile);
-t_file		*find_file(char *r_line, char *redi);
-void	print_table(t_readline *a);
+void		lstclear_t_file(t_file **lst, void (*del)(void *));
+void		free_t_file(t_file *p_file);
+void		lstadd_back_t_file(t_file **lst, t_file *new);
 
 /*parsing_util5.c*/
+void		set_ds_quote(int *s_quote, int *d_quote, char cmd);
 char		*put_env(char *command, char **env);
+
+/*parsing_util6.c*/
+int			count_pipe_in_quote(char *r_line);
+char		**check_pipe_in_quote(char **temp1, char *r_line);
+
+/*echo.c*/
+int			echo(int argc, char **argv, char ***env);
+
+/*pwd.c*/
+int			pwd(int argc, char **argv, char ***env);
+
+/*env.c*/
+int			env(int argc, char **argv, char ***envv);
+
+/*exec_single_buitlin.c*/
+int			exec_single_builtin(char **argv, char ***env);
+
 #endif

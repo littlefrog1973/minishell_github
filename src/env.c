@@ -12,16 +12,18 @@
 
 #include "minishell.h"
 
-void	env_fun(char **env)
+int	env(int argc, char **argv, char ***envv)
 {
 	int	i;
 
-	if (!env)
+	(void) argc;
+	(void) argv;
+	if (!(*envv))
 		return (EXIT_FAILURE);
 	i = 0;
-	while (env[i])
+	while ((*envv)[i])
 	{
-		printf("%s\n", env[i]);
+		printf("%s\n", (*envv)[i]);
 		i++;
 	}
 	return (EXIT_SUCCESS);

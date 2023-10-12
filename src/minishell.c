@@ -6,7 +6,7 @@
 /*   By: pboonpro <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/08 22:41:21 by pboonpro         ###   ########.fr       */
+/*   Updated: 2023/10/11 23:15:06 by pboonpro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,16 +72,15 @@ int	main(int argc, char *argv[], char *environ[])
 	while (1)
 	{
 		read_line = readline(PROMPT);
-		// if (!read_line)
-		// 	break;
+		if (!read_line)
+			exit (0);
 		add_history(read_line);
 		p_line = parsing_line(read_line, new_env);
 		if (!p_line)
+		{
+			free_ptr(read_line);
 			continue ;
-			//return(free_duo_ptr(new_env), free(read_line), perror("minishell: main"), 1);
-		print_table(p_line);
-			return (free_duo_ptr(new_env), free(read_line),
-				perror("minishell: main"), 1);
+		}
 		if (!read_line || !ft_strncmp(read_line, "exit", sizeof("exit") - 1))
 		{
 			if (!read_line)
@@ -99,6 +98,8 @@ int	main(int argc, char *argv[], char *environ[])
 			rl_clear_history();
 			exit (EXIT_SUCCESS);
 		}
+		else if (!p_line->n_pipe)
+			exec_single_builtin(ft_split(p_line->command, ' '), &new_env);
 		free(read_line);
 		lstclear_r_line(&p_line, free_t_readline);
 	}

@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 23:00:19 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/08 18:30:05 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/10 08:34:54 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,54 @@ char	*del_in_out2(char *ccmd, t_file *infile, t_file *outfile)
 	if (!to_return)
 		return (perror("parsing"), free(cmd), NULL);
 	return (free(cmd), to_return);
+}
+
+void	lstadd_back_t_file(t_file **lst, t_file *new)
+{
+	t_file	*running;
+
+	if (*lst == NULL && new != NULL)
+	{
+		*lst = new;
+	}
+	else if (new != NULL)
+	{
+		running = *lst;
+		while (running->next != NULL)
+			running = running->next;
+		running->next = new;
+	}
+}
+
+void	lstclear_t_file(t_file **lst, void (*del)(void *))
+{
+	t_file	*tmp;
+	t_file	*to_delete;
+
+	tmp = *lst;
+	while (tmp->next != NULL)
+	{
+		to_delete = tmp;
+		del(tmp->filename);
+		tmp = to_delete->next;
+		free(to_delete);
+	}
+	del(tmp->filename);
+	free(tmp);
+	*lst = NULL;
+}
+
+void	free_t_file(t_file *p_file)
+{
+	t_file	*running;
+	t_file	*current;
+
+	running = p_file;
+	while (running)
+	{
+		current = running;
+		free(current->filename);
+		running = current->next;
+		free(current);
+	}
 }

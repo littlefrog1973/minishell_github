@@ -6,9 +6,10 @@
 #    By: pboonpro <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/17 13:45:55 by sdeeyien          #+#    #+#              #
-#    Updated: 2023/10/09 23:12:48 by pboonpro         ###   ########.fr        #
+#    Updated: 2023/10/11 23:16:47 by pboonpro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
 
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -g
@@ -27,11 +28,10 @@ SRCDIR = ./src/
 OBJDIR =
 DEPS = minishell.h
 
-SRC = minishell.c get_token.c cd.c utils.c utils2.c export.c unset.c execute.c \
-		parsing.c parsing_util.c parsing_util2.c parsing_util3.c parsing_util4.c \
-		parsing_util3_1.c debug.c \
-		parsing_util.c parsing_util2.c parsing_util3.c parsing_util4.c \
-		parsing_util3_1.c parsing_1.c parsing_util5.c
+SRC = minishell.c get_token.c cd.c utils.c utils2.c export.c unset.c  \
+		parsing_util.c parsing_util2.c parsing_util4.c \
+		parsing_util3_1.c parsing_1.c parsing_util5.c parsing_util6.c \
+		pwd.c echo.c env.c exec_single_builtin.c
 #SRC = get_token.c try_getpath.c
 #SRC = read_line_with_history.c
 #BONUS =

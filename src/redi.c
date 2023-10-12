@@ -15,11 +15,12 @@
 typedef struct s_exe
 {
 	int				*fd_in;
+	int				size_fd_in;
 	int				*fd_out;
+	int				size_fd_out;
 	int				real_in;
 	int				real_out;
 	char			**cmd;
-	struct s_exe	*next;
 }	t_exe;
 
 typedef struct s_pipe
@@ -27,6 +28,13 @@ typedef struct s_pipe
 	int	*pipe_fd;
 	int	size;
 }	t_pipe;
+
+void	free_exe(t_exe **str, int i)
+{
+	while (i-- > 0)
+		free(str[i]);
+	free (str);
+}
 
 void	ft_execlear(t_exe **lst)
 {
@@ -213,50 +221,46 @@ void	*do_fd(t_exe *exe)
 	}
 }
 
-t_exe	*create_exe(t_readline *file)
+void	create_exe(t_exe *new, t_readline *file)
 {
-	t_exe	*new;
-	int		size;
+	int	size;
 
-	new = malloc(sizeof(t_exe));
 	size = ft_filesize(file->infile);
+	new->size_fd_in = size;
 	new->fd_in = malloc(sizeof(int) * size);
 	size = ft_filesize(file->outfile);
+	new->size_fd_out = size;
 	new->fd_out = malloc(sizeof(int) * size);
 	new->cmd = ft_split(file->command, " ");
-	if (!new || !new->fd_in || !new->fd_out || !new->cmd)
+	if (!new || !new->cmd)
 	{
 		if (new->cmd)
 			free_duo_ptr(new->cmd);
-		if (new->fd_in)
-			free(new->fd_in);
-		if (new->fd_out)
-			free(new->fd_out);
 		if (new)
 			free(new);
 		return (NULL);
 	}
-	return (new);
 }
 
-void	join_exe(t_readline *file, t_exe *head)
+t_exe	*join_exe(t_readline *file)
 {
-	int			size;
+	int			i;
 	t_readline	*tmp;
 	t_exe		*new;
 
+	i = 0;
+	new = malloc(sizeof(t_exe) * (ft_filesize(file) + 1));
+	if (!new)
+		return (NULL);
 	tmp = file;
 	while (tmp)
 	{
-		new = create_exe(tmp);
-		if (!new)
-		{
-			ft_execlear(&head);
-			return (NULL);
-		}
-		ft_exeadd_back(&head, new);
+		create_exe(&new[i],tmp);
 		tmp = tmp->next;
+		i++;
 	}
+	new[i] = NULL;
+	return (new);
 }
 
 // void	do_all_redi(t_readline *file)
@@ -284,11 +288,11 @@ void	do_pipe(int npipe, t_pipe *a)
 
 void	main_exe(t_readline *file)
 {
-	t_exe	*head;
+	t_exe	*p_exe;
 	t_pipe	pipe;
 
 	do_pipe(file->n_pipe, &pipe);
-	join_exe(file, &head);
+	p_exe = join_exe(file);
 	do_heredoc();
 	do_all_redi();
 	exe();
