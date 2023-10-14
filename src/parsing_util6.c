@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 12:53:56 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/12 13:53:51 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/14 08:43:57 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,8 @@ char	**check_pipe_in_quote(char **temp1, char *r_line)
 			return (perror("parsing"), free(rr_line), free_duo_ptr(temp1),
 				NULL);
 		free_ptr(temp1[l + 1]);
-		ft_memmove(&temp1[l + 1], &temp1[l + 2], count_str(&temp1[l + 2])
+		ft_memmove(&temp1[l + 1], &temp1[l + 2], (count_str(&temp1[l + 2]) + 1)
 			* sizeof(char *));
-		ft_memset(&temp1[l + 1 + count_str(&temp1[l + 2])], 0, sizeof(char *));
 		--i;
 	}
 	return (free(rr_line), temp1);
