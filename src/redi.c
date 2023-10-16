@@ -111,6 +111,20 @@ void	do_here(t_exe *a, t_readline *line)
 	}
 }
 
+void	error_file(char *s, int mode)
+{
+	ft_putstr_fd("minishell: ", 2);
+	write(2, s, ft_strlen(s));
+	if (mode == 1)
+		ft_putstr_fd(": command not found\n", 2);
+	else if (mode == 2)
+		ft_putstr_fd(": too many arguments\n", 2);
+	else if (mode == 3)
+		ft_putstr_fd(": No such file or directory\n", 2);
+	else if (mode == 4)
+		ft_putstr_fd(": Permission denied\n", 2);
+}
+
 int	check_fd_in(char *name)
 {
 	int	fd;
@@ -123,9 +137,10 @@ int	check_fd_in(char *name)
 	else
 	{
 		if (access(name, F_OK))
-			// error
+			error_file(name, 3);
 		else if (access(name, W_OK))
-			// error
+			error_file(name, 4);
+		return (0);
 	}
 }
 
@@ -159,7 +174,8 @@ int	check_fd_out(char *name)
 	}
 	else
 	{
-		//error statement
+		error_file(name, 4);
+		return (0);
 	}
 }
 
@@ -174,7 +190,8 @@ int	check_fd_app(char *name)
 	}
 	else
 	{
-		//error statement
+		error_file(name, 4);
+		return(0);
 	}
 }
 
