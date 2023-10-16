@@ -16,8 +16,8 @@ int	echo(int argc, char **argv, char ***env)
 {
 	int		i;
 	int		new_line;
-	char	*to_free;
 
+	(void) env;
 	new_line = 1;
 	i = 1;
 	if (argv[i] && ft_strnstr(argv[i], "-n", 2))
@@ -27,11 +27,9 @@ int	echo(int argc, char **argv, char ***env)
 	}
 	while (argv[i])
 	{
-		to_free = put_env(argv[i], *env);
-		printf("%s", to_free);
+		printf("%s", argv[i]);
 		if (i != argc - 1)
 			printf(" ");
-		free(to_free);
 		i++;
 	}
 	if (!argv[i] && new_line)

@@ -6,13 +6,13 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 23:15:34 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/11 14:02:56 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/12 13:19:41 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	**interpret(char **command, char **env)
+static char	**interpret(char **command, char **env, int status)
 {
 	char	*temp;
 	int		i;
@@ -26,7 +26,7 @@ static char	**interpret(char **command, char **env)
 			return (free_duo_ptr(command), (char **) NULL);
 		free(temp);
 		temp = command[i];
-		command[i] = put_env(command[i], env);
+		command[i] = put_env(command[i], env, status);
 		if (!command[i])
 			return (perror("minishell: parsing"), free_duo_ptr(command),
 				free(temp), (char**) NULL);
@@ -35,7 +35,8 @@ static char	**interpret(char **command, char **env)
 	return (command);
 }
 
-static char	**set_r_line_temp(char *read_line, char **r_line, char **env)
+static char	**set_r_line_temp(char *read_line, char **r_line, char **env,
+	int status)
 {
 	char	**temp1;
 	char	**temp2;
@@ -49,7 +50,7 @@ static char	**set_r_line_temp(char *read_line, char **r_line, char **env)
 	temp1 = check_pipe_in_quote(temp1, *r_line);
 	if (!temp1)
 		return (free(*r_line), (char **) NULL);
-	temp2 = interpret(temp1, env);
+	temp2 = interpret(temp1, env, status);
 	if (!temp2)
 		return (free_duo_ptr(temp1), free(*r_line), (char **) NULL);
 	if (temp1 == temp2)
@@ -74,7 +75,7 @@ static t_readline	*set_p_line(t_readline *p_line, char *temp, char *r_line)
 	return (p_line);
 }
 
-t_readline	*parsing_line(char *read_line, char **env)
+t_readline	*parsing_line(char *read_line, char **env, int status)
 {
 	t_readline	*p_line;
 	char		**temp;
@@ -84,7 +85,7 @@ t_readline	*parsing_line(char *read_line, char **env)
 
 	if (!(*read_line))
 		return (NULL);
-	temp = set_r_line_temp(read_line, &r_line, env);
+	temp = set_r_line_temp(read_line, &r_line, env, status);
 	if (!temp || !r_line)
 		return (free_ptr(r_line), NULL);
 	to_free = temp;

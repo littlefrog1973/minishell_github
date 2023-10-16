@@ -20,6 +20,7 @@ typedef struct s_exe
 	int				size_fd_out;
 	int				real_in;
 	int				real_out;
+	int				size_exe;
 	char			**cmd;
 }	t_exe;
 
@@ -34,52 +35,6 @@ void	free_exe(t_exe **str, int i)
 	while (i-- > 0)
 		free(str[i]);
 	free (str);
-}
-
-void	ft_execlear(t_exe **lst)
-{
-	t_exe	*curr;
-	t_exe	*after;
-
-	after = *lst;
-	while (after)
-	{
-		curr = after;
-		after = curr->next;
-		free_duo_ptr(curr->cmd);
-		free(curr->fd_in);
-		free(curr->fd_out);
-		curr = NULL;
-	}
-	*lst = NULL;
-}
-
-t_exe	*ft_exelast(t_exe *lst)
-{
-	if (!lst)
-		return (lst);
-	else
-	{
-		while (lst->next != 0)
-			lst = lst->next;
-	}
-	return (lst);
-}
-
-void	ft_exeadd_back(t_exe **lst, t_exe *new)
-{
-	t_exe	*ptr;
-
-	if (lst == NULL || new == NULL)
-		return ;
-	if (*lst == NULL)
-		*lst = new;
-	else
-	{
-		ptr = ft_exelast(*lst);
-		ptr->next = new;
-		new->next = NULL;
-	}
 }
 
 int	ft_filesize(t_file *lst)
@@ -108,116 +63,156 @@ int	ft_readlinesize(t_readline *lst)
 	return (i);
 }
 
-int	heredoc_count(t_readline *file)
+int	open_here(char *name, t_readline *file)
 {
-	t_file	*temp;
-	int		i;
-
-	i = 0;
-	temp = file->infile;
-	while (temp)
-	{
-		if (temp->type == HEREDOC)
-			i++;
-		temp = temp->next;
-	}
-	return (i);
-}
-
-int	do_here(char *name, t_readline *file)
-{
-	int		*fd;
+	int		fd;
 	char	*buff;
 	int		count;
-	int		i;
 
 	i = 0;
-	if (!fd)
+	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
 		return (-1);
-	while (i < count)
+	while (1)
 	{
-		fd[i] = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		write(STDIN_FILENO, "> ", 2);
 		buff = get_next_line(STDIN_FILENO);
-		while (ft_strncmp(name, buff, ft_strlen(name)))
+		if (!ft_strncmp(name, buff, ft_strlen(name)) \
+				&& (ft_strlen(buff) - 1) == ft_strlen(name))
 		{
-
+			free(buff);
+			break ;
 		}
-		i++;
+		write(fd, buff, ft_strlen(buff));
+		free(buff);
+	}
+	return (fd);
+}
+
+void	do_here(t_exe *a, t_readline *line)
+{
+	int			i;
+	t_readline	*tmp_line;
+	t_file		*tmp_file;
+
+	tmp_line = line;
+	while (tmp_line)
+	{
+		tmp_file = tmp_line->infile;
+		i = 0;
+		while (tmp_file)
+		{
+			if (tmp_file->type == HEREDOC)
+				a->fd_in[i] = open_here(tmp_file->filename, line);
+			i++;
+			tmp_file->next;
+		}
+		tmp_line = tmp_line->next;
 	}
 }
 
-int	*do_fd_in(t_readline *file)
+int	check_fd_in(char *name)
 {
-	int		size;
-	int		*fd;
+	int	fd;
+
+	if (!access(name, F_OK | R_OK))
+	{
+		fd = open(temp->filename, O_RDONLY, 0644);
+		return (fd);
+	}
+	else
+	{
+		if (access(name, F_OK))
+			// error
+		else if (access(name, W_OK))
+			// error
+	}
+}
+
+int	*do_fd_in(t_exe *a, t_readline *file)
+{
 	t_file	*temp;
 	int		i;
 
 	i = 0;
 	temp = file->infile;
-	size = ft_filesize(file->infile);
-	fd = malloc(sizeof(int) * size);
-	if (!fd)
-		return (0);
 	while (temp)
 	{
 		if (temp->type == INFILE)
-			fd[i] = open(temp->filename, O_RDONLY, 0644);
+			a->fd_in[i] = check_fd_in(temp->filename);
 		if (!fd[i])
-		{
-			free(fd);
-			return (-1);
-		}
+			return (0);
 		i++;
 		temp = temp->next;
 	}
 	return (fd);
 }
 
-int	*do_fd_out(t_readline *file)
+int	check_fd_out(char *name)
 {
-	int		size;
+	int	fd;
+
+	if (access(name, F_OK) || !access(name, W_OK))
+	{
+		fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		return (fd);
+	}
+	else
+	{
+		//error statement
+	}
+}
+
+int	check_fd_app(char *name)
+{
+	int	fd;
+
+	if (access(name, F_OK) || !access(name, W_OK))
+	{
+		fd = open(name, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		return (fd);
+	}
+	else
+	{
+		//error statement
+	}
+}
+
+int	*do_fd_out(t_exe *a, t_readline *file)
+{
 	t_file	*temp;
 	int		i;
-	int		*fd;
 
 	i = 0;
 	temp = file->outfile;
-	size = ft_filesize(file->outfile);
-	fd = malloc(sizeof(int) * size);
-	if (!fd)
-		return (0);
 	while (temp)
 	{
 		if (temp->type == OUTFILE)
-			fd[i] = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			a->fd_out[i] = check_fd_out(temp->filename);
 		else if (temp->type == APPEND)
-			fd[i] = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			a->fd_out[i] = check_fd_app(temp->filename);
 		if (!fd[i])
-		{
-			free(fd);
-			return (-1);
-		}
+			return (0);
 		i++;
 		temp = temp->next;
 	}
-	return (fd);
+	return (1);
 }
 
-void	*do_fd(t_exe *exe)
+void	ft_execlear(t_exe *new, t_pipe *p)
 {
-	t_exe	*all_fd;
-
-	all_fd->fd_in = do_fd_in(exe);
-	all_fd->fd_out = do_fd_out(exe);
-	if (all_fd->fd_in < 0 || all_fd->fd_out < 0)
+	if (new->fd_in)
+		free(new->fd_in);
+	if (new->fd_out)
+		free(new->fd_out);
+	if (new->cmd)
+		free_duo_ptr(new->cmd);
+	if (new)
+		free(new);
+	if (p)
 	{
-		if (all_fd->fd_in)
-			free(all_fd->fd_in);
-		if (all_fd->fd_out)
-			free(all_fd->fd_out);
-		free(all_fd);
-		return ;
+		if (p->pipe_fd)
+			free(p->pipe_fd);
 	}
 }
 
@@ -227,17 +222,20 @@ void	create_exe(t_exe *new, t_readline *file)
 
 	size = ft_filesize(file->infile);
 	new->size_fd_in = size;
-	new->fd_in = malloc(sizeof(int) * size);
+	if (size == 0);
+		new->fd_in = -1;
+	else
+		new->fd_in = malloc(sizeof(int) * size);
 	size = ft_filesize(file->outfile);
 	new->size_fd_out = size;
-	new->fd_out = malloc(sizeof(int) * size);
+	if (size == 0)
+		new->fd_out = -1;
+	else
+		new->fd_out = malloc(sizeof(int) * size);
 	new->cmd = ft_split(file->command, " ");
-	if (!new || !new->cmd)
+	if (!new || !new->cmd || !new->fd_in || !new->fd_out)
 	{
-		if (new->cmd)
-			free_duo_ptr(new->cmd);
-		if (new)
-			free(new);
+		ft_execlear(new, NULL);
 		return (NULL);
 	}
 }
@@ -249,7 +247,8 @@ t_exe	*join_exe(t_readline *file)
 	t_exe		*new;
 
 	i = 0;
-	new = malloc(sizeof(t_exe) * (ft_filesize(file) + 1));
+	new->size_exe = ft_filesize(file);
+	new = malloc(sizeof(t_exe) * (new->size_exe + 1));
 	if (!new)
 		return (NULL);
 	tmp = file;
@@ -263,10 +262,42 @@ t_exe	*join_exe(t_readline *file)
 	return (new);
 }
 
-// void	do_all_redi(t_readline *file)
-// {
+void	setup_pipe(t_pipe *p, t_exe *a)
+{
+	int	i;
 
-// }
+	i = 0;
+	while (i < a->size_exe)
+	{
+		if (i == 0)
+			a->real_out = p->pipe_fd[(2 * i) + 1];
+		else if (i + 1 != a->size_exe)
+			a->real_in = p->pipe_fd[(2 * i) - 2];
+		else
+		{
+			a->real_out = p->pipe_fd[(2 * i) + 1];
+			a->real_in = p->pipe_fd[(2 * i) - 2];
+		}
+		i++;
+	}
+}
+
+void	do_all_redi(t_exe *a, t_pipe *p)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	setup_pipe(p, a);
+	while (i < a->size_exe)
+	{
+		if (a->size_fd_in != -1)
+			a->real_in = a->fd_in[a->size_fd_in - 1];
+		if (a->size_fd_out != -1)
+			a->real_out = a->fd_out[a->size_fd_out - 1];
+		i++;
+	}
+}
 
 void	do_pipe(int npipe, t_pipe *a)
 {
@@ -289,13 +320,12 @@ void	do_pipe(int npipe, t_pipe *a)
 void	main_exe(t_readline *file)
 {
 	t_exe	*p_exe;
-	t_pipe	pipe;
+	t_pipe	p_pipe;
 
-	do_pipe(file->n_pipe, &pipe);
+	do_pipe(file->n_pipe, &p_pipe);
 	p_exe = join_exe(file);
-	do_heredoc();
-	do_all_redi();
+	do_here(p_exe, file);
+	do_all_redi(p_exe, p_pipe);
 	exe();
-	free_pipe();
-	ft_execlear();
+	ft_execlear(p_exe, p_pipe);
 }

@@ -6,7 +6,7 @@
 /*   By: pboonpro <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/11 23:15:36 by pboonpro         ###   ########.fr       */
+/*   Updated: 2023/10/14 22:20:32 by pboonpro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,10 @@ int			exec(char **argv, char ***envp, int i);
 /*minishell.c*/
 int			get_fullpath(const char *line, char *full_path, char **env);
 
-/*parsing.c*/
+/*parsing_1.c*/
 // trim white space from front and rear of read_line
 // create and init struct t_readline
-t_readline	*parsing_line(char *r_line, char **env);
+t_readline	*parsing_line(char *r_line, char **env, int status);
 
 /*parsing_util.c*/
 int			init_t_file(t_file **file);
@@ -119,8 +119,12 @@ void		free_t_file(t_file *p_file);
 void		lstadd_back_t_file(t_file **lst, t_file *new);
 
 /*parsing_util5.c*/
+char		*put_env(char *command, char **env, int status);
+
+/*parsing_util5a.c*/
+size_t		dup_buf_status(char *buf, size_t i, int status, size_t *k);
+void		init_put_env_var(size_t *i, size_t *j, int *s_quote, int *d_quote);
 void		set_ds_quote(int *s_quote, int *d_quote, char cmd);
-char		*put_env(char *command, char **env);
 
 /*parsing_util6.c*/
 int			count_pipe_in_quote(char *r_line);
