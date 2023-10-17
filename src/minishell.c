@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/17 17:03:29 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/17 17:08:25 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,7 @@ void	return_promt(int signum)
 void	do_nothing(int signum)
 {
 	if (signum == SIGQUIT)
-	{
-		rl_replace_line("abc", 1);
-		rl_redisplay();
-	}
+	{}
 }
 
 int	get_fullpath(const char *line, char *full_path, char **env)
