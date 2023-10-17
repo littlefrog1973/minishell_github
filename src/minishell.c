@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/12 13:02:52 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/17 17:03:29 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,19 @@
 
 void	return_promt(int signum)
 {
-	(void) signum;
 	if (signum == SIGINT)
 	{
-		printf("^C\n");
+		printf("\n");
 		rl_on_new_line();
+		rl_redisplay();
+	}
+}
+
+void	do_nothing(int signum)
+{
+	if (signum == SIGQUIT)
+	{
+		rl_replace_line("abc", 1);
 		rl_redisplay();
 	}
 }
@@ -62,9 +70,9 @@ int	main(int argc, char *argv[], char *environ[])
 
 	status = 1234;
 	void_arg(&argc, argv);
+	set_terminal();
 	signal(SIGINT, return_promt);
-	signal(SIGQUIT, return_promt);
-	rl_catch_signals = 0;
+	signal(SIGQUIT, do_nothing);
 	new_env = env_dup(environ, NULL);
 	if (!new_env)
 		return (perror("minishell:"), 1);
@@ -72,7 +80,10 @@ int	main(int argc, char *argv[], char *environ[])
 	{
 		read_line = readline(PROMPT);
 		if (!read_line)
+		{
+			printf("exit\n");
 			exit (0);
+		}
 		add_history(read_line);
 		p_line = parsing_line(read_line, new_env, status);
 		if (!p_line)

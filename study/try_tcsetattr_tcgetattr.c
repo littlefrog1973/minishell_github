@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 14:57:51 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/06 16:05:26 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/17 15:51:52 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int main() {
     // Set a minimal input read timeout
     newAttributes.c_cc[VTIME] = 0;
     newAttributes.c_cc[VMIN] = 1;
+//  newAttributes.c_cc[VQUIT] = 0;
 
     // Apply the modified attributes to the terminal
     if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &newAttributes) == -1) {
