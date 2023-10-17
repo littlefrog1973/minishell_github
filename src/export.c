@@ -6,7 +6,7 @@
 /*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 10:00:49 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/09/24 22:48:42 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/14 10:17:36 by sdeeyien         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,17 @@ static char	**add_env(char ***env, char *pwd)
 
 	new_env = (char **) ft_calloc(count_str(*env) + 2, sizeof(char *));
 	if (!new_env)
-		return ((char **) NULL);
+		return (perror("export"), (char **) NULL);
 	i = count_str(*env);
 	while (--i >= 0)
 	{
 		new_env[i] = ft_strdup((*env)[i]);
 		if (!new_env[i])
-			return (free_duo_ptr(new_env), (char **) NULL);
+			return (perror("export"), free_duo_ptr(new_env), (char **) NULL);
 	}
 	new_env[count_str(*env)] = ft_strdup(pwd);
 	if (!new_env[count_str(*env)])
-		return (free_duo_ptr(new_env), (char **) NULL);
+		return (perror("export"), free_duo_ptr(new_env), (char **) NULL);
 	return (new_env);
 }
 
