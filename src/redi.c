@@ -12,251 +12,6 @@
 
 #include "minishell.h"
 
-typedef struct s_exe
-{
-	int				*fd_in;
-	int				size_fd_in;
-	int				*fd_out;
-	int				size_fd_out;
-	int				real_in;
-	int				real_out;
-	int				size_exe;
-	char			**cmd;
-}	t_exe;
-
-typedef struct s_pipe
-{
-	int	*pipe_fd;
-	int	size;
-}	t_pipe;
-
-void	free_exe(t_exe **str, int i)
-{
-	while (i-- > 0)
-		free(str[i]);
-	free (str);
-}
-
-int	ft_filesize(t_file *lst)
-{
-	int	i;
-
-	i = 0;
-	while (lst)
-	{
-		lst = lst->next;
-		i++;
-	}
-	return (i);
-}
-
-int	ft_readlinesize(t_readline *lst)
-{
-	int	i;
-
-	i = 0;
-	while (lst)
-	{
-		lst = lst->next;
-		i++;
-	}
-	return (i);
-}
-
-int	open_here(char *name, t_readline *file)
-{
-	int		fd;
-	char	*buff;
-	int		count;
-
-	i = 0;
-	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
-		return (-1);
-	while (1)
-	{
-		write(STDIN_FILENO, "> ", 2);
-		buff = get_next_line(STDIN_FILENO);
-		if (!ft_strncmp(name, buff, ft_strlen(name)) \
-				&& (ft_strlen(buff) - 1) == ft_strlen(name))
-		{
-			free(buff);
-			break ;
-		}
-		write(fd, buff, ft_strlen(buff));
-		free(buff);
-	}
-	return (fd);
-}
-
-void	do_here(t_exe *a, t_readline *line)
-{
-	int			i;
-	t_readline	*tmp_line;
-	t_file		*tmp_file;
-
-	tmp_line = line;
-	while (tmp_line)
-	{
-		tmp_file = tmp_line->infile;
-		i = 0;
-		while (tmp_file)
-		{
-			if (tmp_file->type == HEREDOC)
-				a->fd_in[i] = open_here(tmp_file->filename, line);
-			i++;
-			tmp_file->next;
-		}
-		tmp_line = tmp_line->next;
-	}
-}
-
-void	error_file(char *s, int mode)
-{
-	ft_putstr_fd("minishell: ", 2);
-	write(2, s, ft_strlen(s));
-	if (mode == 1)
-		ft_putstr_fd(": command not found\n", 2);
-	else if (mode == 2)
-		ft_putstr_fd(": too many arguments\n", 2);
-	else if (mode == 3)
-		ft_putstr_fd(": No such file or directory\n", 2);
-	else if (mode == 4)
-		ft_putstr_fd(": Permission denied\n", 2);
-}
-
-int	check_fd_in(char *name)
-{
-	int	fd;
-
-	if (!access(name, F_OK | R_OK))
-	{
-		fd = open(temp->filename, O_RDONLY, 0644);
-		return (fd);
-	}
-	else
-	{
-		if (access(name, F_OK))
-			error_file(name, 3);
-		else if (access(name, W_OK))
-			error_file(name, 4);
-		return (0);
-	}
-}
-
-int	*do_fd_in(t_exe *a, t_readline *file)
-{
-	t_file	*temp;
-	int		i;
-
-	i = 0;
-	temp = file->infile;
-	while (temp)
-	{
-		if (temp->type == INFILE)
-			a->fd_in[i] = check_fd_in(temp->filename);
-		if (!fd[i])
-			return (0);
-		i++;
-		temp = temp->next;
-	}
-	return (fd);
-}
-
-int	check_fd_out(char *name)
-{
-	int	fd;
-
-	if (access(name, F_OK) || !access(name, W_OK))
-	{
-		fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		return (fd);
-	}
-	else
-	{
-		error_file(name, 4);
-		return (0);
-	}
-}
-
-int	check_fd_app(char *name)
-{
-	int	fd;
-
-	if (access(name, F_OK) || !access(name, W_OK))
-	{
-		fd = open(name, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		return (fd);
-	}
-	else
-	{
-		error_file(name, 4);
-		return(0);
-	}
-}
-
-int	*do_fd_out(t_exe *a, t_readline *file)
-{
-	t_file	*temp;
-	int		i;
-
-	i = 0;
-	temp = file->outfile;
-	while (temp)
-	{
-		if (temp->type == OUTFILE)
-			a->fd_out[i] = check_fd_out(temp->filename);
-		else if (temp->type == APPEND)
-			a->fd_out[i] = check_fd_app(temp->filename);
-		if (!fd[i])
-			return (0);
-		i++;
-		temp = temp->next;
-	}
-	return (1);
-}
-
-void	ft_execlear(t_exe *new, t_pipe *p)
-{
-	if (new->fd_in)
-		free(new->fd_in);
-	if (new->fd_out)
-		free(new->fd_out);
-	if (new->cmd)
-		free_duo_ptr(new->cmd);
-	if (new)
-		free(new);
-	if (p)
-	{
-		if (p->pipe_fd)
-			free(p->pipe_fd);
-	}
-}
-
-void	create_exe(t_exe *new, t_readline *file)
-{
-	int	size;
-
-	size = ft_filesize(file->infile);
-	new->size_fd_in = size;
-	if (size == 0);
-		new->fd_in = -1;
-	else
-		new->fd_in = malloc(sizeof(int) * size);
-	size = ft_filesize(file->outfile);
-	new->size_fd_out = size;
-	if (size == 0)
-		new->fd_out = -1;
-	else
-		new->fd_out = malloc(sizeof(int) * size);
-	new->cmd = ft_split(file->command, " ");
-	if (!new || !new->cmd || !new->fd_in || !new->fd_out)
-	{
-		ft_execlear(new, NULL);
-		return (NULL);
-	}
-}
-
 t_exe	*join_exe(t_readline *file)
 {
 	int			i;
@@ -271,7 +26,7 @@ t_exe	*join_exe(t_readline *file)
 	tmp = file;
 	while (tmp)
 	{
-		create_exe(&new[i],tmp);
+		create_exe(&new[i], tmp);
 		tmp = tmp->next;
 		i++;
 	}
@@ -334,7 +89,7 @@ void	do_pipe(int npipe, t_pipe *a)
 	}
 }
 
-void	main_exe(t_readline *file)
+void	main_exe(t_readline *file, int *status, char ***env)
 {
 	t_exe	*p_exe;
 	t_pipe	p_pipe;
@@ -343,6 +98,6 @@ void	main_exe(t_readline *file)
 	p_exe = join_exe(file);
 	do_here(p_exe, file);
 	do_all_redi(p_exe, p_pipe);
-	exe();
-	ft_execlear(p_exe, p_pipe);
+	exe(a, p_pipe, status, env);
+	ft_execlear(p_exe, p_pipe); // close all file if heredoc unlink it
 }
