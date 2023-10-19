@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
+/*   By: littlefrog <littlefrog@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/19 15:06:25 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/19 23:47:03 by littlefrog       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ int	main(int argc, char *argv[], char *environ[])
 	void_arg(&argc, argv);
 	set_terminal();
 	signal(SIGINT, return_promt);
-	signal(SIGQUIT, do_nothing);
 	new_env = env_dup(environ, NULL);
 	if (!new_env)
 		return (perror("minishell:"), 1);
