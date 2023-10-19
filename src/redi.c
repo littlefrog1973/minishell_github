@@ -20,7 +20,7 @@ t_exe	*join_exe(t_readline *file)
 
 	i = 0;
 	new->size_exe = ft_filesize(file);
-	new = malloc(sizeof(t_exe) * (new->size_exe + 1));
+	new = malloc(sizeof(t_exe) * new->size_exe);
 	if (!new)
 		return (NULL);
 	tmp = file;
@@ -30,7 +30,6 @@ t_exe	*join_exe(t_readline *file)
 		tmp = tmp->next;
 		i++;
 	}
-	new[i] = NULL;
 	return (new);
 }
 
@@ -54,12 +53,14 @@ void	setup_pipe(t_pipe *p, t_exe *a)
 	}
 }
 
-void	do_all_redi(t_exe *a, t_pipe *p)
+void	do_all_redi(t_exe *a, t_pipe *p, t_readline *file)
 {
 	int	i;
 	int	j;
 
 	i = 0;
+	do_fd_in(a, file);
+	do_fd_out(a, file);
 	setup_pipe(p, a);
 	while (i < a->size_exe)
 	{
@@ -77,6 +78,12 @@ void	do_pipe(int npipe, t_pipe *a)
 
 	i = 0;
 	a->size = npipe;
+	if (npipe < 1)
+	{
+		a->pipe_fd = NULL;
+		a->size = 0;
+		return ;
+	}
 	a->pipe_fd = malloc(sizeof(int) * npipe);
 	while (i < npipe)
 	{
@@ -97,7 +104,7 @@ void	main_exe(t_readline *file, int *status, char ***env)
 	do_pipe(file->n_pipe, &p_pipe);
 	p_exe = join_exe(file);
 	do_here(p_exe, file);
-	do_all_redi(p_exe, p_pipe);
-	exe(a, p_pipe, status, env);
-	ft_execlear(p_exe, p_pipe); // close all file if heredoc unlink it
+	do_all_redi(p_exe, &p_pipe, file);
+	exe(p_exe, p_pipe, status, env);
+	ft_execlear(p_exe, &p_pipe); // close all file if heredoc unlink it
 }

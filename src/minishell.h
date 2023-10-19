@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pboonpro <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: pboonpro <pboonpro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/18 01:18:42 by pboonpro         ###   ########.fr       */
+/*   Updated: 2023/10/19 22:55:18 by pboonpro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,8 +176,8 @@ void		error_file(char *s, int mode);
 
 /*redi_do.c*/
 void		do_here(t_exe *a, t_readline *line);
-int			*do_fd_in(t_exe *a, t_readline *file);
-int			*do_fd_out(t_exe *a, t_readline *file);
+void		*do_fd_in(t_exe *a, t_readline *file);
+void		*do_fd_out(t_exe *a, t_readline *file);
 
 /*redi.c*/
 void		main_exe(t_readline *file, int *status, char ***env);

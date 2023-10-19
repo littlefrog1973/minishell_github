@@ -34,7 +34,7 @@ void	do_here(t_exe *a, t_readline *line)
 	}
 }
 
-int	*do_fd_in(t_exe *a, t_readline *file)
+void	*do_fd_in(t_exe *a, t_readline *file)
 {
 	t_file	*temp;
 	int		i;
@@ -45,15 +45,14 @@ int	*do_fd_in(t_exe *a, t_readline *file)
 	{
 		if (temp->type == INFILE)
 			a->fd_in[i] = check_fd_in(temp->filename);
-		if (!fd[i])
-			return (0);
+		if (!a->fd_in[i])
+			return ;
 		i++;
 		temp = temp->next;
 	}
-	return (fd);
 }
 
-int	*do_fd_out(t_exe *a, t_readline *file)
+void	*do_fd_out(t_exe *a, t_readline *file)
 {
 	t_file	*temp;
 	int		i;
@@ -66,10 +65,9 @@ int	*do_fd_out(t_exe *a, t_readline *file)
 			a->fd_out[i] = check_fd_out(temp->filename);
 		else if (temp->type == APPEND)
 			a->fd_out[i] = check_fd_app(temp->filename);
-		if (!fd[i])
-			return (0);
+		if (!a->fd_out[i])
+			return ;
 		i++;
 		temp = temp->next;
 	}
-	return (1);
 }

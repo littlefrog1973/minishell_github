@@ -47,14 +47,16 @@ int	ft_readlinesize(t_readline *lst)
 
 void	ft_execlear(t_exe *new, t_pipe *p)
 {
-	if (new->fd_in)
-		free(new->fd_in);
-	if (new->fd_out)
-		free(new->fd_out);
-	if (new->cmd)
-		free_duo_ptr(new->cmd);
 	if (new)
+	{
+		if (new->fd_in)
+			free(new->fd_in);
+		if (new->fd_out)
+			free(new->fd_out);
+		if (new->cmd)
+			free_duo_ptr(new->cmd);
 		free(new);
+	}
 	if (p)
 	{
 		if (p->pipe_fd)
