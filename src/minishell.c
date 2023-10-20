@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: littlefrog <littlefrog@student.42.fr>      +#+  +:+       +#+        */
+/*   By: pboonpro <pboonpro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/19 23:47:03 by littlefrog       ###   ########.fr       */
+/*   Updated: 2023/10/20 13:27:21 by pboonpro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ int	main(int argc, char *argv[], char *environ[])
 		{
 			if (!read_line)
 			{
+			// printf("hello exit\n");
 				printf("exit\n");
 				free_duo_ptr(new_env);
 				lstclear_r_line(&p_line, free_t_readline);
@@ -97,10 +98,11 @@ int	main(int argc, char *argv[], char *environ[])
 			rl_clear_history();
 			exit (EXIT_SUCCESS);
 		}
-		else if (!p_line->n_pipe)
-			status = exec_single_builtin(ft_split(p_line->command, ' '), &new_env);
+		else
+			main_exe(p_line, &status, &new_env);
 		free(read_line);
 		lstclear_r_line(&p_line, free_t_readline);
 	}
+	printf("exit\n");
 	return (status);
 }

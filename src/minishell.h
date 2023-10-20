@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
+/*   By: pboonpro <pboonpro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:40:06 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/17 16:50:10 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/20 15:18:14 by pboonpro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,25 @@ typedef struct s_readline
 	t_file				*outfile;
 	struct s_readline	*next;
 }	t_readline;
+
+typedef struct s_exe
+{
+	char			**cmd;
+	int				size_fd_in;
+	int				pid;
+	int				size_fd_out;
+	int				real_in;
+	int				real_out;
+	int				size_exe;
+	int				*fd_in;
+	int				*fd_out;
+}	t_exe;
+
+typedef struct s_pipe
+{
+	int	*pipe_fd;
+	int	size;
+}	t_pipe;
 
 /*readline.c*/
 char		*readline_wrap(const char *prompt);
@@ -140,9 +159,40 @@ int			pwd(int argc, char **argv, char ***env);
 int			env(int argc, char **argv, char ***envv);
 
 /*exec_single_buitlin.c*/
-int			exec_single_builtin(char **argv, char ***env);
+void		exec_single_builtin(char **argv, t_pipe *p_pipe, int *status, char ***env);
 
+/*redi_utils.c*/
+void		free_exe(t_exe **str, int i);
+int			ft_filesize(t_file *lst);
+int			ft_readlinesize(t_readline *lst);
+void		ft_execlear(t_exe *new, t_pipe *p);
+void		create_exe(t_exe *new, t_readline *file);
+
+/*redi_check.c*/
+int			check_fd_in(char *name);
+int			check_fd_out(char *name);
+int			check_fd_app(char *name);
+int			open_here(char *name);
+void		error_file(char *s, int mode);
+
+/*redi_do.c*/
+void		do_here(t_exe *a, t_readline *line);
+void		do_fd_in(t_exe *a, t_readline *file);
+void		do_fd_out(t_exe *a, t_readline *file);
+
+/*redi.c*/
+void		main_exe(t_readline *file, int *status, char ***env);
+t_exe		*join_exe(t_readline *file);
+void		setup_pipe(t_pipe *p, t_exe *a);
+void		do_all_redi(t_exe *a, t_pipe *p, t_readline *file);
+void		do_pipe(int npipe, t_pipe *a);
 /*utils3.c*/
 int	set_terminal(void);
+
+
+void		close_file(t_exe *a, t_readline *file);
+
+void	exe(t_exe *a, t_pipe *p_pipe, int *status, char ***env);
+
 
 #endif

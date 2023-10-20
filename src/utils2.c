@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sdeeyien <sukitd@gmail.com>                +#+  +:+       +#+        */
+/*   By: pboonpro <pboonpro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 22:45:00 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/11 16:13:55 by sdeeyien         ###   ########.fr       */
+/*   Updated: 2023/10/19 21:14:13 by pboonpro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	**adding_line(char **env, char **temp, char *add_line, size_t i)
 			temp[new_str(env, add_line)] = line_to_add;
 		}
 		else
-		temp[i] = line_to_add;
+			temp[i] = line_to_add;
 	}
 	return (temp);
 }
