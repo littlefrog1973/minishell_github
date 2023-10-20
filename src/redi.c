@@ -38,20 +38,22 @@ t_exe	*join_exe(t_readline *file)
 void	setup_pipe(t_pipe *p, t_exe *a)
 {
 	int	i;
+	int	size;
 
 	i = 0;
 	if (a->size_exe - 1 == 0)
 		return ;
-	while (i < a->size_exe)
+	size = a->size_exe;
+	while (i < size)
 	{
 		if (i == 0)
-			a->real_out = p->pipe_fd[(2 * i) + 1];
-		else if (i + 1 != a->size_exe)
-			a->real_in = p->pipe_fd[(2 * i) - 2];
+			a[i].real_out = p->pipe_fd[(2 * i) + 1];
+		else if (i + 1 == size)
+			a[i].real_in = p->pipe_fd[(2 * i) - 2];
 		else
 		{
-			a->real_out = p->pipe_fd[(2 * i) + 1];
-			a->real_in = p->pipe_fd[(2 * i) - 2];
+			a[i].real_out = p->pipe_fd[(2 * i) + 1];
+			a[i].real_in = p->pipe_fd[(2 * i) - 2];
 		}
 		i++;
 	}
@@ -60,17 +62,19 @@ void	setup_pipe(t_pipe *p, t_exe *a)
 void	do_all_redi(t_exe *a, t_pipe *p, t_readline *file)
 {
 	int	i;
+	int	size;
 
 	i = 0;
 	do_fd_in(a, file);
 	do_fd_out(a, file);
 	setup_pipe(p, a);
-	while (i < a->size_exe)
+	size = a->size_exe;
+	while (i < size)
 	{
-		if (a->size_fd_in != -1)
-			a->real_in = a->fd_in[a->size_fd_in - 1];
-		if (a->size_fd_out != -1)
-			a->real_out = a->fd_out[a->size_fd_out - 1];
+		if (a[i].size_fd_in != -1 && a[i].fd_in != (int *)(-1))
+			a[i].real_in = a[i].fd_in[a[i].size_fd_in - 1];
+		if ((a[i].size_fd_out != -1) && (a[i].fd_out != (int *)(-1)))
+			a[i].real_out = a[i].fd_out[a[i].size_fd_out - 1];
 		i++;
 	}
 }
@@ -87,7 +91,7 @@ void	do_pipe(int npipe, t_pipe *a)
 		a->size = 0;
 		return ;
 	}
-	a->pipe_fd = malloc(sizeof(int) * npipe);
+	a->pipe_fd = malloc(sizeof(int) * (npipe * 2));
 	while (i < npipe)
 	{
 		if (pipe(a->pipe_fd + (i * 2)) < 0)
@@ -95,7 +99,7 @@ void	do_pipe(int npipe, t_pipe *a)
 			free(a->pipe_fd);
 			return ;
 		}
-		i += 2;
+		i++;
 	}
 }
 

@@ -25,10 +25,13 @@ int	check_have_path(char **env, int *i)
 
 void	errorh(char **cmd, int mode, char *str)
 {
-	ft_putstr_fd("pipex :", 2);
+	ft_putstr_fd("minishell : ", 2);
+	ft_putstr_fd(cmd[0], 2);
+	ft_putstr_fd(" : ", 2);
 	ft_putstr_fd(str, 2);
 	if (mode == 1)
 		free_duo_ptr(cmd);
+	exit(EXIT_FAILURE);
 }
 
 char	*find_path(char *cmd, char **env)
@@ -40,7 +43,7 @@ char	*find_path(char *cmd, char **env)
 
 	i = 0;
 	if (!check_have_path(env, &i))
-		errorh(NULL, 0, " Command not found :\n");
+		errorh(NULL, 0, "Command not found\n");
 	my_path = ft_split(env[i] + 5, ':');
 	i = 0;
 	while (my_path[i])
@@ -80,19 +83,19 @@ void	exe_com(t_exe *a, char ***env)
 	char	*path;
 
 	if (ft_strncmp(a->cmd[0], "\0", 1) == 0)
-		errorh(NULL, 0, " Command not found :\n");
+		errorh(NULL, 0, "Command not found\n");
 	if (check_is_path(a->cmd) == 0)
 	{
 		path = find_path(a->cmd[0], *env);
 		if (!path)
-			errorh(a->cmd, 1, " Command not found :\n");
+			errorh(a->cmd, 0, "Command not found\n");
 	}
 	else
 		path = ft_substr(a->cmd[0], 0, ft_strlen(a->cmd[0]));
 	if (execve(path, a->cmd, *env) != 0)
 	{
 		free(path);
-		errorh(a->cmd, 1, " Can't execve :\n");
+		errorh(a->cmd, 0, "Can't execve\n");
 	}
 }
 
@@ -136,15 +139,34 @@ void	close_pipe(t_pipe *p, int i, int size)
 		close(p->pipe_fd[(2 * i) - 2]);
 	else
 	{
-		close(p->pipe_fd[(2 * i) + 1]);
 		close(p->pipe_fd[(2 * i) - 2]);
+		close(p->pipe_fd[(2 * i) + 1]);
 	}
 }
 
 void	ft_dup(t_exe *a, int i)
 {
-	dup2(a[i].real_in, STDIN_FILENO);
-	dup2(a[i].real_out, STDOUT_FILENO);
+	int	j;
+
+	j = 0;
+	if (i != -1)
+		j = i;
+	dup2(a[j].real_in, STDIN_FILENO);
+	dup2(a[j].real_out, STDOUT_FILENO);
+}
+
+void	close_child_pipe(t_pipe *p)
+{
+	int	i;
+	int	size;
+
+	i = 0;
+	size = p->size * 2;
+	while (i < size)
+	{
+		close(p->pipe_fd[i]);
+		i++;
+	}
 }
 
 int	fork_exe(t_exe *a, t_pipe *p_pipe, char ***env, int i)
@@ -152,13 +174,13 @@ int	fork_exe(t_exe *a, t_pipe *p_pipe, char ***env, int i)
 	int	pid;
 
 	pid = fork();
-	if (pid == 0)
+	if (!pid)
 	{
-		if (i == -1)
-			ft_dup(a, 0);
-		else
-			ft_dup(a, i);
+		ft_dup(a, i);
+		dprintf(2, "before exeve : %d\n", i);
 		exe_com(a, env);
+		if (i != -1)
+			close_child_pipe(p_pipe);
 	}
 	close_pipe(p_pipe, i, a->size_exe);
 	return (pid);
@@ -167,11 +189,13 @@ int	fork_exe(t_exe *a, t_pipe *p_pipe, char ***env, int i)
 void	wait_pid(t_exe *a, int *status)
 {
 	int	i;
+	int	size;
 
 	i = 0;
-	while (i < a->size_exe)
+	size = a->size_exe;
+	while (i < size)
 	{
-		waitpid(a[i].pid, status, 0);
+		waitpid(a[i].pid, status, WUNTRACED);
 		*status = WEXITSTATUS(*status);
 		i++;
 	}
@@ -190,7 +214,7 @@ int	fork_single(t_exe *a, t_pipe *p_pipe, int *status, char ***env)
 	return (pid);
 }
 
-void	exe(t_exe *a, t_pipe *p_pipe, int *status, char ***env)
+int	have_command(t_exe *a)
 {
 	int	i;
 	int	size;
@@ -199,9 +223,25 @@ void	exe(t_exe *a, t_pipe *p_pipe, int *status, char ***env)
 	size = a->size_exe;
 	while (i < size)
 	{
-		if (size > 1) //more then 1 command
-			a[i].pid = fork_exe(&a[i], p_pipe, env, i);
-		else if (size == 1) //single comand builtin
+		if (!a[i].cmd[0])
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+void	exe(t_exe *a, t_pipe *p_pipe, int *status, char ***env)
+{
+	int	i;
+	int	size;
+
+	i = 0;
+	if (!have_command(a))
+		return ;
+	size = a->size_exe;
+	while (i < size)
+	{
+		if (size == 1) //single comand builtin
 		{
 			if (is_builtin(a->cmd))
 			{
@@ -216,10 +256,11 @@ void	exe(t_exe *a, t_pipe *p_pipe, int *status, char ***env)
 			else
 				a[i].pid = fork_exe(&a[i], p_pipe, env, -1);
 		}
+		else
+			a[i].pid = fork_exe(&a[i], p_pipe, env, i);
 		i++;
 	}
 	wait_pid(a, status);
-	return ;
 }
 
 void	close_here(t_readline *line)
