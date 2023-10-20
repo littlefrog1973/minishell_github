@@ -6,7 +6,7 @@
 /*   By: pboonpro <pboonpro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 08:17:08 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/19 23:36:34 by pboonpro         ###   ########.fr       */
+/*   Updated: 2023/10/19 23:58:01 by pboonpro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static size_t	dup_buf_env2(char *buf, char *command, size_t *i, char **env)
 	return (0);
 }
 
-char	*put_env(char *command, char **env, int status)
+char	*put_env(char *cmd, char **env, int status)
 {
 	char	buf[BUFSIZ];
 	size_t	i;
@@ -91,20 +91,20 @@ char	*put_env(char *command, char **env, int status)
 
 	ft_memset(buf, 0, BUFSIZ);
 	init_put_env_var(&i, &j, &s_quote, &d_quote);
-	while (command[i])
+	while (cmd[i])
 	{
-		if ((command[i] == '\'' && !d_quote) || (command[i] == '"' && !s_quote))
+		if ((cmd[i] == '\'' && !d_quote) || (cmd[i] == '"' && !s_quote))
 		{
-			set_ds_quote_4args(&s_quote, &d_quote, command[i], &i);
+			set_ds_quote_4args(&s_quote, &d_quote, cmd[i], &i);
 			continue ;
 		}
 		if (s_quote)
-			dup_buf(buf, command, &i, &j);
+			dup_buf(buf, cmd, &i, &j);
 		else if (d_quote || !s_quote)
 		{
-			if (command[i] == '$' && command[i + 1] == '?')
+			if (cmd[i] == '$' && cmd[i + 1] == '?')
 				j += dup_buf_status(buf, j, status, &i);
-			j += dup_buf_env2(buf, command, &i, env);
+			j += dup_buf_env2(buf, cmd, &i, env);
 		}
 	}
 	return (ft_strdup(buf));

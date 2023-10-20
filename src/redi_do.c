@@ -26,15 +26,15 @@ void	do_here(t_exe *a, t_readline *line)
 		while (tmp_file)
 		{
 			if (tmp_file->type == HEREDOC)
-				a->fd_in[i] = open_here(tmp_file->filename, line);
+				a->fd_in[i] = open_here(tmp_file->filename);
 			i++;
-			tmp_file->next;
+			tmp_file = tmp_file->next;
 		}
 		tmp_line = tmp_line->next;
 	}
 }
 
-void	*do_fd_in(t_exe *a, t_readline *file)
+void	do_fd_in(t_exe *a, t_readline *file)
 {
 	t_file	*temp;
 	int		i;
@@ -52,7 +52,7 @@ void	*do_fd_in(t_exe *a, t_readline *file)
 	}
 }
 
-void	*do_fd_out(t_exe *a, t_readline *file)
+void	do_fd_out(t_exe *a, t_readline *file)
 {
 	t_file	*temp;
 	int		i;

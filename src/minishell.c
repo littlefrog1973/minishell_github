@@ -6,7 +6,7 @@
 /*   By: pboonpro <pboonpro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 13:39:20 by sdeeyien          #+#    #+#             */
-/*   Updated: 2023/10/19 21:22:50 by pboonpro         ###   ########.fr       */
+/*   Updated: 2023/10/20 13:27:21 by pboonpro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 
 void	return_promt(int signum)
 {
-	(void) signum;
 	if (signum == SIGINT)
 	{
-		printf("^C\n");
+		printf("\n");
 		rl_on_new_line();
 		rl_redisplay();
 	}
@@ -62,9 +61,8 @@ int	main(int argc, char *argv[], char *environ[])
 
 	status = 1234;
 	void_arg(&argc, argv);
+	set_terminal();
 	signal(SIGINT, return_promt);
-	signal(SIGQUIT, return_promt);
-	rl_catch_signals = 0;
 	new_env = env_dup(environ, NULL);
 	if (!new_env)
 		return (perror("minishell:"), 1);
@@ -72,7 +70,10 @@ int	main(int argc, char *argv[], char *environ[])
 	{
 		read_line = readline(PROMPT);
 		if (!read_line)
+		{
+			printf("exit\n");
 			exit (0);
+		}
 		add_history(read_line);
 		p_line = parsing_line(read_line, new_env, status);
 		if (!p_line)
@@ -97,8 +98,8 @@ int	main(int argc, char *argv[], char *environ[])
 			rl_clear_history();
 			exit (EXIT_SUCCESS);
 		}
-		else if (!p_line->n_pipe)
-			status = exec_single_builtin(ft_split(p_line->command, ' '), &new_env);
+		else
+			main_exe(p_line, &status, &new_env);
 		free(read_line);
 		lstclear_r_line(&p_line, free_t_readline);
 	}

@@ -3,13 +3,12 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pboonpro <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: pboonpro <pboonpro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/17 13:45:55 by sdeeyien          #+#    #+#              #
-#    Updated: 2023/10/14 22:21:01 by pboonpro         ###   ########.fr        #
+#    Updated: 2023/10/20 15:16:03 by pboonpro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
 
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -g
@@ -31,7 +30,8 @@ DEPS = minishell.h
 SRC = minishell.c get_token.c cd.c utils.c utils2.c export.c unset.c  \
 		parsing_util.c parsing_util2.c parsing_util4.c \
 		parsing_util3_1.c parsing_1.c parsing_util5.c parsing_util6.c \
-		pwd.c echo.c env.c exec_single_builtin.c parsing_util5a.c
+		pwd.c echo.c env.c exec_single_builtin.c parsing_util5a.c \
+		utils3.c redi.c redi_do.c redi_check.c redi_utils.c exe.c
 #SRC = get_token.c try_getpath.c
 #SRC = read_line_with_history.c
 #BONUS =

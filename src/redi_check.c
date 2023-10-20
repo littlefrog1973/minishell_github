@@ -18,7 +18,7 @@ int	check_fd_in(char *name)
 
 	if (!access(name, F_OK | R_OK))
 	{
-		fd = open(temp->filename, O_RDONLY, 0644);
+		fd = open(name, O_RDONLY, 0644);
 		return (fd);
 	}
 	else
@@ -63,13 +63,11 @@ int	check_fd_app(char *name)
 	}
 }
 
-int	open_here(char *name, t_readline *file)
+int	open_here(char *name)
 {
 	int		fd;
 	char	*buff;
-	int		count;
 
-	i = 0;
 	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		return (-1);
